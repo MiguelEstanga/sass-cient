@@ -11,7 +11,7 @@ import type { Client } from "@/types/client.types";
 import type { ClientFormValues } from "@/lib/validations/client.schema";
 import styles from "./ClientSelector.module.css";
 import { ClientForm } from "@/app/[locale]/(dashboard)/clients/components/ClientForm";
-
+import { useTranslations } from "next-intl";
 interface Props {
   selectedClient: Client | null;
   onSelect: (client: Client) => void;
@@ -23,7 +23,7 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const t = useTranslations("pos");
   // Caché de clientes
   const {
     rows: clients,
