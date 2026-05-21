@@ -1,0 +1,4 @@
+.form { display: flex; flex-direction: column; gap: var(--spacing-md); }
+.checkboxRow { display: flex; align-items: center; gap: var(--spacing-sm); cursor: pointer; font-size: var(--font-size-sm); color: var(--color-text); user-select: none; }
+.checkbox { width: 1.125rem; height: 1.125rem; accent-color: var(--color-primary); cursor: pointer; }
+.footer { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-top: var(--spacing-lg); }

@@ -1,0 +1,128 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "actions": "Actions",
+    "back": "Back"
+  },
+  "auth": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign in",
+    "loginError": "Invalid credentials",
+    "welcomeBack": "Welcome back"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email"
+  },
+  "services": {
+    "title": "Services",
+    "subtitle": "{count, plural, =1 {# service registered} other {# services registered}}",
+    "newButton": "+ New Service",
+    "searchPlaceholder": "Search by name...",
+    "newTitle": "New service",
+    "editTitle": "Edit service",
+    "newSubtitle": "Fill in the details for the new service",
+    "editSubtitle": "Editing: {name}",
+    "deleteTitle": "Delete service",
+    "deleteMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    "deleteConfirm": "Yes, delete",
+    "created": "{name} created successfully",
+    "updated": "{name} updated successfully",
+    "deleted": "\"{name}\" deleted successfully",
+    "errorConnection": "Connection error",
+    "errorDeleting": "Error deleting"
+  },
+
+  "products": {
+    "title": "Products",
+    "subtitle": "{count, plural, =1 {# product registered} other {# products registered}}",
+    "newButton": "+ New Product",
+    "searchPlaceholder": "Search by name or code...",
+    "newTitle": "New product",
+    "editTitle": "Edit product",
+    "newSubtitle": "Fill in the details for the new product",
+    "editSubtitle": "Editing: {name}",
+    "deleteTitle": "Delete product",
+    "deleteMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+    "deleteConfirm": "Yes, delete",
+    "created": "{name} created successfully",
+    "updated": "{name} updated successfully",
+    "deleted": "\"{name}\" deleted successfully",
+    "errorConnection": "Connection error",
+    "errorDeleting": "Error deleting"
+  },
+  "finance": {
+    "categories": {
+      "title": "Financial Categories",
+      "subtitle": "{count, plural, =1 {# category registered} other {# categories registered}}",
+      "newButton": "+ New Category",
+      "searchPlaceholder": "Search by name...",
+      "newTitle": "New category",
+      "editTitle": "Edit category",
+      "newSubtitle": "Create new category for loans or payments",
+      "editSubtitle": "Editing: {name}",
+      "deleteTitle": "Delete category",
+      "deleteMessage": "Are you sure you want to delete \"{name}\"?",
+      "deleteConfirm": "Yes, delete",
+      "created": "{name} created successfully",
+      "updated": "{name} updated successfully",
+      "deleted": "{name} deleted successfully",
+      "errorConnection": "Connection error",
+      "errorDeleting": "Error deleting"
+    },
+    "transactions": {
+      "title": "Income & Expenses",
+      "subtitle": "Quick cash flow log",
+      "newButton": "+ New Movement",
+      "searchPlaceholder": "Search by concept...",
+      "newTitle": "Record movement",
+      "newSubtitle": "Add direct income or expense",
+      "editTitle": "Edit movement",
+      "editSubtitle": "Modify cash record",
+      "incomeCreated": "Income recorded successfully",
+      "expenseCreated": "Expense recorded successfully",
+      "updated": "Movement updated successfully",
+      "deleteTitle": "Delete movement",
+      "deleteMessage": "Are you sure you want to delete \"{concept}\"?",
+      "deleteConfirm": "Yes, delete",
+      "deleted": "Movement deleted successfully",
+      "errorConnection": "Connection error"
+    },
+    "loans": {
+      "title": "Loans",
+      "subtitle": "{count, plural, =1 {# loan registered} other {# loans registered}}",
+      "newButton": "+ New Loan",
+      "searchPlaceholder": "Search by client...",
+      "newTitle": "New Loan",
+      "editTitle": "Edit Loan",
+      "newSubtitle": "Register new loan to client",
+      "editSubtitle": "Editing loan",
+      "deleteTitle": "Delete Loan",
+      "deleteMessage": "Are you sure you want to delete the loan of \"{name}\"?",
+      "deleteConfirm": "Yes, delete",
+      "created": "Loan created successfully",
+      "updated": "Loan updated successfully",
+      "deleted": "Loan deleted successfully",
+      "errorConnection": "Connection error",
+      "errorDeleting": "Error deleting"
+    },
+    "sales": {
+      "title": "Sales History",
+      "subtitle": "{count, plural, =1 {# sale registered} other {# sales registered}}",
+      "searchPlaceholder": "Search by ID, client..."
+    }
+  }
+}

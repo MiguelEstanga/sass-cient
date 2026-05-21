@@ -1,0 +1,128 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "actions": "Acciones",
+    "back": "Volver"
+  },
+  "auth": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "loginButton": "Ingresar",
+    "loginError": "Credenciales inválidas",
+    "welcomeBack": "Bienvenido de vuelta"
+  },
+  "dashboard": {
+    "title": "Panel principal",
+    "welcome": "Bienvenido"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "email": "Correo electrónico inválido"
+  },
+  "services": {
+    "title": "Servicios",
+    "subtitle": "{count, plural, =1 {# servicio registrado} other {# servicios registrados}}",
+    "newButton": "+ Nuevo Servicio",
+    "searchPlaceholder": "Buscar por nombre...",
+    "newTitle": "Nuevo servicio",
+    "editTitle": "Editar servicio",
+    "newSubtitle": "Completa los datos del nuevo servicio",
+    "editSubtitle": "Editando: {name}",
+    "deleteTitle": "Eliminar servicio",
+    "deleteMessage": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
+    "deleteConfirm": "Sí, eliminar",
+    "created": "{name} creado correctamente",
+    "updated": "{name} actualizado correctamente",
+    "deleted": "\"{name}\" eliminado correctamente",
+    "errorConnection": "Error de conexión",
+    "errorDeleting": "Error al eliminar"
+  },
+  "products": {
+    "title": "Productos",
+    "subtitle": "{count, plural, =1 {# producto registrado} other {# productos registrados}}",
+    "newButton": "+ Nuevo Producto",
+    "searchPlaceholder": "Buscar por nombre o código...",
+    "newTitle": "Nuevo producto",
+    "editTitle": "Editar producto",
+    "newSubtitle": "Completa los datos del nuevo producto",
+    "editSubtitle": "Editando: {name}",
+    "deleteTitle": "Eliminar producto",
+    "deleteMessage": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
+    "deleteConfirm": "Sí, eliminar",
+    "created": "{name} creado correctamente",
+    "updated": "{name} actualizado correctamente",
+    "deleted": "\"{name}\" eliminado correctamente",
+    "errorConnection": "Error de conexión",
+    "errorDeleting": "Error al eliminar"
+  },
+
+  "finance": {
+    "categories": {
+      "title": "Categorías Financieras",
+      "subtitle": "{count, plural, =1 {# categoría registrada} other {# categorías registradas}}",
+      "newButton": "+ Nueva Categoría",
+      "searchPlaceholder": "Buscar por nombre...",
+      "newTitle": "Nueva categoría",
+      "editTitle": "Editar categoría",
+      "newSubtitle": "Crear nueva categoría para préstamos o pagos",
+      "editSubtitle": "Editando: {name}",
+      "deleteTitle": "Eliminar categoría",
+      "deleteMessage": "¿Estás seguro de que quieres eliminar \"{name}\"?",
+      "deleteConfirm": "Sí, eliminar",
+      "created": "{name} creada correctamente",
+      "updated": "{name} actualizada correctamente",
+      "deleted": "{name} eliminada correctamente",
+      "errorConnection": "Error de conexión",
+      "errorDeleting": "Error al eliminar"
+    },
+    "transactions": {
+      "title": "Ingresos y Gastos",
+      "subtitle": "Registro rápido de movimientos",
+      "newButton": "+ Nuevo Movimiento",
+      "searchPlaceholder": "Buscar por concepto...",
+      "newTitle": "Registrar movimiento",
+      "newSubtitle": "Agregar ingreso o gasto directo",
+      "editTitle": "Editar movimiento",
+      "editSubtitle": "Modificar registro de caja",
+      "incomeCreated": "Ingreso registrado correctamente",
+      "expenseCreated": "Gasto registrado correctamente",
+      "updated": "Movimiento actualizado correctamente",
+      "deleteTitle": "Eliminar movimiento",
+      "deleteMessage": "¿Estás seguro de que quieres eliminar \"{concept}\"?",
+      "deleteConfirm": "Sí, eliminar",
+      "deleted": "Movimiento eliminado correctamente",
+      "errorConnection": "Error de conexión"
+    },
+    "loans": {
+      "title": "Préstamos",
+      "subtitle": "{count, plural, =1 {# préstamo registrado} other {# préstamos registrados}}",
+      "newButton": "+ Nuevo Préstamo",
+      "searchPlaceholder": "Buscar por cliente...",
+      "newTitle": "Nuevo Préstamo",
+      "editTitle": "Editar Préstamo",
+      "newSubtitle": "Registrar nuevo préstamo a cliente",
+      "editSubtitle": "Editando préstamo",
+      "deleteTitle": "Eliminar Préstamo",
+      "deleteMessage": "¿Estás seguro de eliminar el préstamo de \"{name}\"?",
+      "deleteConfirm": "Sí, eliminar",
+      "created": "Préstamo registrado correctamente",
+      "updated": "Préstamo actualizado correctamente",
+      "deleted": "Préstamo eliminado correctamente",
+      "errorConnection": "Error de conexión",
+      "errorDeleting": "Error al eliminar"
+    },
+    "sales": {
+      "title": "Sales History",
+      "subtitle": "{count, plural, =1 {# sale registered} other {# sales registered}}",
+      "searchPlaceholder": "Search by ID, client..."
+    }
+  }
+}

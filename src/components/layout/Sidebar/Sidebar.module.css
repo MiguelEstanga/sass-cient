@@ -1,0 +1,240 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition-slow);
+  z-index: var(--z-sticky);
+  overflow: hidden;
+}
+
+.collapsed {
+  width: var(--sidebar-width-collapsed);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  height: var(--header-height);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.logoIcon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Nav */
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--spacing-md) var(--spacing-sm);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px var(--spacing-sm);
+  border-radius: var(--radius-md);
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.active {
+  background: var(--color-primary) !important;
+  color: #fff !important;
+}
+
+.navIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Tooltip al colapsar */
+.tooltip {
+  display: none;
+  position: absolute;
+  left: calc(var(--sidebar-width-collapsed) + 8px);
+  background: var(--color-text);
+  color: #fff;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-dropdown);
+}
+
+.collapsed .navItem:hover .tooltip {
+  display: block;
+}
+
+/* User info */
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.userDetails {
+  overflow: hidden;
+}
+
+.userName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userRole {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: capitalize;
+}
+
+/* Toggle button */
+.toggleBtn {
+  position: absolute;
+  bottom: 80px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid var(--color-bg);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition-fast);
+  z-index: 10;
+}
+
+.toggleBtn:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ===================================
+   ESTILOS PARA SUBMENÚS (FINANZAS)
+   =================================== */
+
+/* El botón del padre (ej: 'Finanzas') */
+.parentItem {
+  cursor: pointer;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.65); /* Igual que .navItem */
+  font-family: inherit;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 10px var(--spacing-sm); /* Igual que .navItem */
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.parentItem:hover {
+  background: rgba(255, 255, 255, 0.08); /* Igual que .navItem:hover */
+  color: #fff; /* Igual que .navItem:hover */
+}
+
+/* Contenedor de las opciones hijas */
+.submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  padding-left: 12px; 
+  margin-left: 20px;
+  /* Línea lateral sutil que se vea en fondo oscuro */
+  border-left: 2px solid rgba(255, 255, 255, 0.15); 
+}
+
+/* Cada opción hija (ej: 'Préstamos') */
+.childItem {
+  padding: 8px var(--spacing-sm); /* Un poco más compacto */
+  font-size: var(--font-size-sm); /* Usa tu variable, no hardcodeado */
+  font-weight: var(--font-weight-medium);
+  color: rgba(255, 255, 255, 0.55); /* Un poco más tenue que el menú principal */
+  border-radius: var(--radius-md);
+}
+
+.childItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* La flechita que gira */
+.chevron {
+  transition: transform 0.2s ease-in-out;
+  color: rgba(255, 255, 255, 0.4); /* Color tenue para que no moleste */
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}

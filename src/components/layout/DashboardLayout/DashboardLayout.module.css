@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg-secondary);
+}
+
+.main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  transition: margin-left var(--transition-slow);
+  min-width: 0;
+}
+
+.mainCollapsed {
+  margin-left: var(--sidebar-width-collapsed);
+}
+
+.content {
+  margin-top: var(--header-height);
+  min-height: calc(100vh - var(--header-height));
+}

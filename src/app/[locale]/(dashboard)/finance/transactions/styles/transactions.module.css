@@ -1,0 +1,13 @@
+.page { padding: var(--spacing-xl); display: flex; flex-direction: column; gap: var(--spacing-lg); }
+.pageHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-md); }
+.title { font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-text); }
+.subtitle { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: var(--spacing-xs); }
+
+/* Toolbar especial para incluir el Select de tipos */
+.toolbar { display: flex; gap: var(--spacing-md); align-items: center; }
+.toolbar .inputContainer { flex: 1; max-width: 400px; }
+.toolbar .selectContainer { min-width: 200px; }
+
+.tableWrapper { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+.name { font-weight: var(--font-weight-medium); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); padding: var(--spacing-md) 0; }

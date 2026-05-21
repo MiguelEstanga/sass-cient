@@ -1,0 +1,38 @@
+/* Estructura idéntica a ClientForm.module.css */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 1rem);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md, 1rem);
+}
+
+/* Fila del checkbox (Servicio activo) */
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 0.5rem);
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.checkbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: var(--color-primary, #000); /* Ajusta al color primario de tu tema */
+  cursor: pointer;
+}
+
+/* Footer de los botones */
+.footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md, 1rem);
+  margin-top: var(--spacing-lg, 1.5rem);
+}
