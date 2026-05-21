@@ -6,13 +6,16 @@ import { CreateServiceDto, Service, ServiceFilters, UpdateServiceDto } from "@/t
 const BASE_URL = "/services";
 
 export const serviceService = {
-  getAll: (filters?: { search?: string; per_page?: number; is_active?: boolean }) => {
+  getAll: (filters?: ServiceFilters) => {
     const params = new URLSearchParams();
     if (filters?.search) params.set("search", filters.search);
     if (filters?.per_page) params.set("per_page", String(filters.per_page));
+    if (filters?.page) params.set("page", String(filters.page));
     if (filters?.is_active !== undefined) params.set("is_active", String(filters.is_active));
     const query = params.toString();
-    return api.get<PaginatedResponse<Service>>(`${BASE_URL}${query ? `?${query}` : ""}`);
+    return api.get<PaginatedResponse<Service>>(
+      `services${query ? `?${query}` : ""}`
+    );
   },
 
   getById: (id: number) =>

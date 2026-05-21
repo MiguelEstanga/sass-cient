@@ -123,6 +123,29 @@
       "title": "Sales History",
       "subtitle": "{count, plural, =1 {# sale registered} other {# sales registered}}",
       "searchPlaceholder": "Search by ID, client..."
-    }
+    },
+    "pos": {
+    "selectClient": "Select Client",
+    "selectEmployee": "Select Employee",
+    "searchClient": "Search by name, phone...",
+    "searchEmployee": "Search employee...",
+    "noContact": "No contact",
+    "noClients": "No clients found",
+    "noEmployees": "No employees found",
+    "newClient": "+ Create new client",
+    "cart": "Cart",
+    "emptyCart": "Add items to cart",
+    "total": "Total",
+    "checkout": "Checkout",
+    "selectClientFirst": "Select a client",
+    "selectEmployeeFirst": "Select an employee",
+    "saleTypeTitle": "What type of sale?",
+    "saleTypeSubtitle": "Select the sale type to continue",
+    "saleTypeProduct": "Product Sale",
+    "saleTypeProductDesc": "Inventory, SKU, stock",
+    "saleTypeService": "Service Sale",
+    "saleTypeServiceDesc": "Haircuts, treatments, manicure",
+    "cancel": "Cancel"
+  }
   }
 }

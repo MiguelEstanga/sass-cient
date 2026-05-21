@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import styles from "./SaleTypeModal.module.css";
-
+import { useTranslations } from "next-intl";
 interface Props {
   open: boolean;
   onSelect: (type: "product" | "service") => void;
@@ -10,6 +10,7 @@ interface Props {
 }
 
 export function SaleTypeModal({ open, onSelect, onClose }: Props) {
+  const t = useTranslations("pos");
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();

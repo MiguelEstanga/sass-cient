@@ -9,7 +9,7 @@ interface CacheOptions<T> {
   keyField: keyof T;
 }
 
-interface FetchParams {
+export interface FetchParams {
   search?: string;
   page?: number;
   per_page?: number;

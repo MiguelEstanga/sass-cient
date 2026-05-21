@@ -123,6 +123,29 @@
       "title": "Sales History",
       "subtitle": "{count, plural, =1 {# sale registered} other {# sales registered}}",
       "searchPlaceholder": "Search by ID, client..."
-    }
+    },
+     "pos": {
+    "selectClient": "Seleccionar Cliente",
+    "selectEmployee": "Seleccionar Ejecutor",
+    "searchClient": "Buscar por nombre, teléfono...",
+    "searchEmployee": "Buscar empleado...",
+    "noContact": "Sin contacto",
+    "noClients": "No se encontraron clientes",
+    "noEmployees": "No se encontraron empleados",
+    "newClient": "+ Crear nuevo cliente",
+    "cart": "Carrito",
+    "emptyCart": "Agrega items al carrito",
+    "total": "Total",
+    "checkout": "Cobrar",
+    "selectClientFirst": "Selecciona un cliente",
+    "selectEmployeeFirst": "Selecciona un ejecutor",
+    "saleTypeTitle": "¿Qué tipo de venta?",
+    "saleTypeSubtitle": "Selecciona el tipo de venta para continuar",
+    "saleTypeProduct": "Venta de Producto",
+    "saleTypeProductDesc": "Inventario, SKU, stock",
+    "saleTypeService": "Venta de Servicio",
+    "saleTypeServiceDesc": "Cortes, tratamientos, manicure",
+    "cancel": "Cancelar"
+  }
   }
 }
