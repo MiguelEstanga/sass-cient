@@ -3,7 +3,6 @@
   width: 100%;
 }
 
-/* Trigger — cuando no hay seleccionado */
 .triggerBox {
   display: flex;
   align-items: center;
@@ -28,7 +27,6 @@
   font-size: var(--font-size-base);
 }
 
-/* Selected box */
 .selectedBox {
   display: flex;
   align-items: center;
@@ -40,15 +38,15 @@
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-full);
   background: var(--color-primary);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   flex-shrink: 0;
 }
@@ -91,24 +89,27 @@
   background: var(--color-error-bg);
 }
 
-/* Dropdown */
+/* Dropdown — posición calculada dinámicamente via style inline */
 .dropdown {
   position: absolute;
-  top: calc(100% + 4px);
   left: 0;
   right: 0;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  z-index: var(--z-dropdown);
+  z-index: var(--z-modal); /* z-index alto para estar sobre el modal del POS */
   overflow: hidden;
+  max-height: 240px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dropdownSearch {
   padding: var(--spacing-sm);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-bg-secondary);
+  flex-shrink: 0;
 }
 
 .searchInput {
@@ -120,6 +121,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   outline: none;
+  box-sizing: border-box;
 }
 
 .searchInput:focus {
@@ -127,8 +129,8 @@
 }
 
 .dropdownList {
-  max-height: 200px;
   overflow-y: auto;
+  flex: 1;
 }
 
 .dropdownItem {
@@ -150,8 +152,8 @@
 }
 
 .itemAvatar {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: var(--radius-full);
   background: var(--color-bg-tertiary);
   color: var(--color-text-secondary);

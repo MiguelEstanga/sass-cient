@@ -176,3 +176,33 @@
   padding: 0 var(--spacing-lg) var(--spacing-md);
   line-height: 1.5;
 }
+
+/* ── Celda del ejecutor en la tabla de items ─────────────────────────────── */
+.performerCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.performerAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.performerName {
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+}

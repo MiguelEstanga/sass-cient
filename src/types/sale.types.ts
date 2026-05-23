@@ -39,22 +39,33 @@ export interface Sale {
 }
 
 export interface SaleItem {
-  id: number;
-  sale_id: number;
-  product_id: number | null;
-  service_id: number | null;
-  quantity: number;
-  unit_price: string;
-  subtotal: string;
-  status: string;
+  id:             number;
+  sale_id:        number;
+  product_id:     number | null;
+  service_id:     number | null;
+  quantity:       number;
+  unit_price:     string;
+  subtotal:       string;
+  status:         string;
+  performance_id: number | null;
+  started_at:     string | null;
+  finished_at:    string | null;
+
+  // ── Relaciones ───────────────────────────────────────────────────────
   product?: {
-    id: number;
-    name: string;
+    id:         number;
+    name:       string;
     image_url?: string;
   };
   service?: {
-    id: number;
+    id:   number;
     name: string;
+  };
+  performer?: {
+    id:    number;
+    name:  string;
+    email?: string;
+    phone?: string;
   };
 }
 
