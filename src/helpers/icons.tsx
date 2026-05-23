@@ -33,6 +33,7 @@ import {
   MoreHorizontal,
   MoreVertical,
   type LucideProps,
+  Clock
 } from "lucide-react";
 
 const iconMap = {
@@ -69,6 +70,7 @@ const iconMap = {
   filter: Filter,
   moreHorizontal: MoreHorizontal,
   moreVertical: MoreVertical,
+  Clock: Clock,
 } as const;
 
 export type IconName = keyof typeof iconMap;

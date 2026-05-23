@@ -10,9 +10,10 @@ interface Props {
   open:    boolean;
   onClose: () => void;
   sale:    Sale | null;
+  onUpdate: () => void;
 }
 
-export function SaleDetailModal({ open, onClose, sale }: Props) {
+export function SaleDetailModal({ open, onClose, sale , onUpdate }: Props) {
   if (!sale) return null;
 
   const paymentLabels: Record<string, string> = {
