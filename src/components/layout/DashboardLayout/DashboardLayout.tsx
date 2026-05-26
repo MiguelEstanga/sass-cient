@@ -10,7 +10,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { sidebarCollapsed } = useUiStore();
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-theme="dark"> {/* ← dark mode */}
       <Sidebar />
       <div
         className={cn(

@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function EmployeeSelector({ value, onChange }: Props) {
-  const t = useTranslations("finance.pos");
+  const t = useTranslations("pos");
   const [showDropdown, setShowDropdown] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

@@ -13,8 +13,11 @@ import { Paginator } from "@/components/ui/Pagination";
 import { SkeletonRow } from "@/components/ui/Skeleton";
 import { ClientsTable } from "./ClientsTable";
 import { ClientForm } from "./components/ClientForm";
+import { PersonForm } from "@/components/ui/PersonForm";
 import type { Client } from "@/types/client.types";
+import type { ClientProfile } from "@/types/user.types";
 import type { ClientFormValues } from "@/lib/validations/client.schema";
+import type { UpdatePersonFormValues } from "@/lib/validations/person.schema";
 import styles from "./styles/clients.module.css";
 
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_PAGE_SIZE) || 10;
@@ -23,16 +26,18 @@ export default function ClientsPage() {
   const toast = useToast();
   const { confirm, dialogProps } = useConfirm();
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [editing, setEditing] = useState<Client | null>(null);
+  const [drawerOpen, setDrawerOpen]     = useState(false);
+  const [editing, setEditing]           = useState<Client | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId]     = useState<number | null>(null);
 
-  const { rows, total, page, lastPage, loading, search, setSearch, setPage, refresh } =
-    useLocalCache<Client>(
-      (params) => clientService.getAll(params),
-      { keyField: "id", blockSize: 1500, pageSize: PAGE_SIZE }
-    );
+  const {
+    rows, total, page, lastPage,
+    loading, search, setSearch, setPage, refresh,
+  } = useLocalCache<Client>(
+    (params) => clientService.getAll(params),
+    { keyField: "id", blockSize: 1500, pageSize: PAGE_SIZE }
+  );
 
   function openCreate() {
     setEditing(null);
@@ -49,16 +54,32 @@ export default function ClientsPage() {
     setEditing(null);
   }
 
-  async function handleSubmit(values: ClientFormValues) {
+  // ── Crear cliente ─────────────────────────────────────────────────────
+  async function handleCreate(values: ClientFormValues) {
     setIsSubmitting(true);
     try {
-      if (editing) {
-        await clientService.update(editing.id, values);
-        toast.success(`${values.name} actualizado correctamente`);
+      await clientService.create(values);
+      toast.success(`${values.name} creado correctamente`);
+      closeDrawer();
+      refresh();
+    } catch (err) {
+      if (err instanceof ApiError && err.isValidationError()) {
+        toast.error(err.getAllErrors().join(", "));
       } else {
-        await clientService.create(values);
-        toast.success(`${values.name} creado correctamente`);
+        toast.error(err instanceof ApiError ? err.message : "Error de conexión");
       }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  // ── Editar cliente — usa PersonForm ───────────────────────────────────
+  async function handleUpdate(values: UpdatePersonFormValues) {
+    if (!editing) return;
+    setIsSubmitting(true);
+    try {
+      await clientService.update(editing.id, values);
+      toast.success(`${values.name} actualizado correctamente`);
       closeDrawer();
       refresh();
     } catch (err) {
@@ -74,7 +95,7 @@ export default function ClientsPage() {
 
   function handleDelete(id: number, name: string) {
     confirm({
-      title: "Eliminar cliente",
+      title:   "Eliminar cliente",
       message: `¿Estás seguro de que quieres eliminar a ${name}? Esta acción no se puede deshacer.`,
       onConfirm: async () => {
         setDeletingId(id);
@@ -83,14 +104,26 @@ export default function ClientsPage() {
           toast.success(`${name} eliminado correctamente`);
           refresh();
         } catch (err) {
-          toast.error(
-            err instanceof ApiError ? err.message : "Error al eliminar"
-          );
+          toast.error(err instanceof ApiError ? err.message : "Error al eliminar");
         } finally {
           setDeletingId(null);
         }
       },
     });
+  }
+
+  // ── Convertir Client a ClientProfile para PersonForm ──────────────────
+  function toClientProfile(client: Client): ClientProfile {
+    return {
+      ...client,
+      _type:   "client",
+      email:   client.email   ?? null,
+      phone:   client.phone   ?? null,
+      notes:   client.notes   ?? null,
+      user_id: client.user_id ?? null,
+      is_busy: false,
+      roles:   [],
+    } as ClientProfile;
   }
 
   return (
@@ -139,7 +172,7 @@ export default function ClientsPage() {
         onChange={setPage}
       />
 
-      {/* Drawer create/edit */}
+      {/* Drawer crear / editar */}
       <Drawer
         open={drawerOpen}
         onClose={closeDrawer}
@@ -150,15 +183,25 @@ export default function ClientsPage() {
             : "Completa los datos del nuevo cliente"
         }
       >
-        <ClientForm
-          defaultValues={editing ?? undefined}
-          onSubmit={handleSubmit}
-          onCancel={closeDrawer}
-          isSubmitting={isSubmitting}
-        />
+        {editing ? (
+          // ── Editar — PersonForm completo ────────────────────────────
+          <PersonForm
+            key={editing.id}
+            person={toClientProfile(editing)}
+            onSubmit={handleUpdate}
+            onCancel={closeDrawer}
+            isSubmitting={isSubmitting}
+          />
+        ) : (
+          // ── Crear — ClientForm con hint de email ────────────────────
+          <ClientForm
+            onSubmit={handleCreate}
+            onCancel={closeDrawer}
+            isSubmitting={isSubmitting}
+          />
+        )}
       </Drawer>
 
-      {/* Confirm delete dialog */}
       <ConfirmDialog {...dialogProps} confirmLabel="Sí, eliminar" />
     </div>
   );

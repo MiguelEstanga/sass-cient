@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils/cn";
 import styles from "./Modal.module.css";
 
 interface DrawerProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
+  open:      boolean;
+  onClose:   () => void;
+  title:     string;
   subtitle?: string;
-  children: React.ReactNode;
-  width?: string;
+  children:  React.ReactNode;
+  width?:    string;
 }
 
 export function Drawer({
@@ -22,7 +22,6 @@ export function Drawer({
   children,
   width = "480px",
 }: DrawerProps) {
-  // Cerrar con Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -31,7 +30,6 @@ export function Drawer({
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  // Bloquear scroll del body cuando está abierto
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -50,7 +48,7 @@ export function Drawer({
         className={cn(styles.drawer, open && styles.drawerOpen)}
         style={{ width }}
       >
-        {/* Header */}
+        {/* Header — siempre visible para la animación */}
         <div className={styles.drawerHeader}>
           <div>
             <h2 className={styles.drawerTitle}>{title}</h2>
@@ -63,8 +61,12 @@ export function Drawer({
           </button>
         </div>
 
-        {/* Content */}
-        <div className={styles.drawerBody}>{children}</div>
+        {/* ── Solo renderizar children cuando está abierto ──────────────
+            Esto evita el problema de <form> anidado porque el ClientForm
+            dentro del ClientSelector no existe en el DOM cuando está cerrado */}
+        <div className={styles.drawerBody}>
+          {open ? children : null}
+        </div>
       </div>
     </>
   );

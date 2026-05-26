@@ -37,7 +37,7 @@ export function Header() {
     <header className={styles.header}>
       <div className={styles.left}>
         <p className={styles.greeting}>
-          Hola, <strong>{user?.name ?? "Usuario"}</strong> 👋
+          Hola, <strong>{user?.name ?? "Usuario"}</strong>  
         </p>
       </div>
 

@@ -1,8 +1,13 @@
 :root {
+  --font-family:
+    var(--font-dm-sans), var(--font-geist-sans), -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), "Fira Code", monospace;
   /* ===== COLORES ===== */
   --color-primary: #3b82f6;
   --color-primary-hover: #2563eb;
   --color-primary-light: #dbeafe;
+  --color-primary-rgb: 59, 130, 246;
 
   --color-bg: #ffffff;
   --color-bg-secondary: #f8fafc;
@@ -21,6 +26,8 @@
   --color-success-bg: #d1fae5;
   --color-warning: #f59e0b;
   --color-warning-bg: #fef3c7;
+  --color-info: #3b82f6;
+  --color-info-bg: #dbeafe;
 
   /* ===== SPACING ===== */
   --spacing-xs: 0.25rem;
@@ -38,10 +45,10 @@
   --radius-full: 9999px;
 
   /* ===== TYPOGRAPHY ===== */
-  --font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, sans-serif;
+  --font-family:
+    var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), "Fira Code", monospace;
-
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -49,7 +56,6 @@
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
-
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -58,7 +64,7 @@
   /* ===== SHADOWS ===== */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 
   /* ===== TRANSITIONS ===== */
   --transition-fast: 150ms ease;
@@ -76,4 +82,45 @@
   --z-modal-backdrop: 900;
   --z-modal: 1000;
   --z-toast: 1100;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TEMA OSCURO — se aplica automáticamente con prefers-color-scheme
+   O manualmente con <html data-theme="dark">
+══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme: dark;
+  }
+}
+
+[data-theme="dark"] {
+  --color-primary:        #6366f1;
+  --color-primary-hover:  #818cf8;
+  --color-primary-light:  rgba(99, 102, 241, 0.15);
+  --color-primary-rgb:    99, 102, 241;
+
+  --color-bg:             #0f172a;
+  --color-bg-secondary:   #1e293b;
+  --color-bg-tertiary:    #0f172a;
+
+  --color-text:           #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted:     #475569;
+
+  --color-border:         rgba(255, 255, 255, 0.08);
+  --color-border-hover:   rgba(255, 255, 255, 0.15);
+
+  --color-error:          #f87171;
+  --color-error-bg:       rgba(239, 68, 68, 0.15);
+  --color-success:        #34d399;
+  --color-success-bg:     rgba(16, 185, 129, 0.15);
+  --color-warning:        #fbbf24;
+  --color-warning-bg:     rgba(245, 158, 11, 0.15);
+  --color-info:           #60a5fa;
+  --color-info-bg:        rgba(59, 130, 246, 0.15);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
 }

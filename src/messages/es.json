@@ -189,5 +189,27 @@
     "noClient": "Sin cliente",
     "subtitleInProgress": "{count} en progreso · {pending} pendientes",
     "subtitlePending": "{count} pendientes"
+  },
+  "appointments": {
+    "title": "Citas",
+    "today": "Hoy",
+    "newAppointment": "Nueva cita",
+    "editAppointment": "Editar cita",
+    "client": "Cliente",
+    "employee": "Empleado",
+    "service": "Servicio",
+    "startTime": "Hora de inicio",
+    "cancel": "Cancelar cita",
+    "save": "Guardar cambios",
+    "create": "Crear cita",
+    "created": "Cita creada exitosamente",
+    "updated": "Cita actualizada",
+    "cancelled": "Cita cancelada",
+    "moved": "Cita movida",
+    "errorLoad": "Error al cargar citas",
+    "errorCreate": "Error al crear cita",
+    "errorMove": "Error al mover",
+    "errorCancel": "Error al cancelar",
+    "back": "Volver"
   }
 }

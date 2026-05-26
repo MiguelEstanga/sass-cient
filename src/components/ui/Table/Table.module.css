@@ -1,37 +1,37 @@
 .wrapper {
-  width: 100%;
-  overflow-x: auto;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  width:        100%;
+  overflow-x:   auto;
+  background:   transparent;
   border-radius: var(--radius-lg);
 }
 
 .table {
-  width: 100%;
+  width:           100%;
   border-collapse: collapse;
-  font-size: var(--font-size-sm);
+  font-size:       var(--font-size-sm);
 }
 
+/* ── Header ──────────────────────────────────────────────────────────────── */
 .table thead tr {
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .table th {
-  padding: var(--spacing-sm) var(--spacing-md);
-  text-align: left;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-  font-size: var(--font-size-xs);
+  padding:        var(--spacing-sm) var(--spacing-md);
+  text-align:     left;
+  font-weight:    var(--font-weight-semibold);
+  color:          rgba(255, 255, 255, 0.25);
+  white-space:    nowrap;
+  font-size:      10px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
+/* ── Filas ───────────────────────────────────────────────────────────────── */
 .table td {
-  padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--color-text);
-  border-bottom: 1px solid var(--color-border);
+  padding:        14px var(--spacing-md);
+  color:          rgba(255, 255, 255, 0.75);
+  border-bottom:  1px solid rgba(255, 255, 255, 0.04);
   vertical-align: middle;
 }
 
@@ -39,19 +39,26 @@
   border-bottom: none;
 }
 
-.table tbody tr:hover {
-  background: var(--color-bg-secondary);
+.table tbody tr {
+  transition: background var(--transition-fast);
 }
 
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ── # número ────────────────────────────────────────────────────────────── */
 .rowNumber {
-  color: var(--color-text-muted);
+  color:     rgba(255, 255, 255, 0.2);
   font-size: var(--font-size-xs);
   text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
+/* ── Vacío ───────────────────────────────────────────────────────────────── */
 .empty {
   text-align: center;
-  padding: var(--spacing-2xl) !important;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  padding:    var(--spacing-2xl) !important;
+  color:      rgba(255, 255, 255, 0.2);
+  font-size:  var(--font-size-sm);
 }

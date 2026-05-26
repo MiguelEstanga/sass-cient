@@ -1,0 +1,225 @@
+/* ── Tarjeta base ────────────────────────────────────────────────────────── */
+.card {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--radius-md);
+  padding: 4px 6px;
+  cursor: grab;
+
+  border-left: 3px solid transparent;
+  box-shadow: var(--shadow-sm);
+  transition:
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  z-index: 10 !important;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  box-shadow: var(--shadow-lg);
+  cursor: grabbing;
+}
+
+/* ── Textos ──────────────────────────────────────────────────────────────── */
+.cardTitle {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.cardSub {
+  font-size: 10px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.cardEmployee {
+  font-size: 9px;
+  margin: 0;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.cardTime {
+  font-size: 9px;
+  margin: 0;
+  opacity: 0.7;
+  line-height: 1.3;
+}
+
+/* ── Botón empezar servicio ──────────────────────────────────────────────── */
+.startBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-top: auto;
+  padding: 3px 6px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-sm);
+  font-size: 9px;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  color: inherit;
+  transition: background var(--transition-fast);
+  width: 100%;
+}
+
+.startBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.startBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COLORES POR ESTADO
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Azul — Programada */
+.statusScheduled {
+  background: #dbeafe;
+  border-left-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+/* Verde — Confirmada */
+.statusConfirmed {
+  background: #d1fae5;
+  border-left-color: #10b981;
+  color: #065f46;
+}
+
+/* Naranja — En progreso */
+.statusInProgress {
+  background: #fef3c7;
+  border-left-color: #f59e0b;
+  color: #92400e;
+}
+
+/* Gris — Completada */
+.statusCompleted {
+  background: #f1f5f9;
+  border-left-color: #94a3b8;
+  color: #475569;
+}
+
+/* Rojo — Cancelada */
+.statusCancelled {
+  background: #fee2e2;
+  border-left-color: #ef4444;
+  color: #991b1b;
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Agregar al AppointmentCard.module.css */
+
+/* ── Tooltip en hover ────────────────────────────────────────────────────── */
+.card:hover {
+  box-shadow: var(--shadow-md);
+  z-index: 100 !important; /* ← subir más para que el tooltip no quede detrás */
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 0;
+  background: #1e293b;
+  color: #fff;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  min-width: 200px;
+  box-shadow: var(--shadow-lg);
+  z-index: 9999; /* ← muy alto para estar sobre todo */
+  pointer-events: none;
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* Flecha izquierda */
+  &::before {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 10px;
+    border: 5px solid transparent;
+    border-right-color: #1e293b;
+  }
+}
+
+.card:hover .tooltip {
+  display: block;
+}
+
+ 
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 2px 0;
+}
+
+.tooltipLabel {
+  opacity: 0.6;
+  font-size: 10px;
+  min-width: 60px;
+}
+
+.tooltipValue {
+  font-weight: var(--font-weight-medium);
+}
+.dragHandle {
+  cursor: grab;
+  padding-bottom: 2px;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+  margin-bottom: 2px;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.cardBody {
+  flex: 1;
+  display:        flex;
+  flex-direction: column;
+  gap:            2px;
+  cursor:         pointer;
+}
+
+.cardBody:hover {
+  opacity: 0.9;
+}

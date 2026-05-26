@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react"; // <-- Agregar useState
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Link } from "@/lib/i18n/routing";
 import { useUiStore } from "@/stores/ui.store";
@@ -12,204 +12,276 @@ import {
   UserCircle,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Scissors,
-  Wallet,       // <-- Icono Finanzas
-  Landmark,     // <-- Icono Préstamos
-  Tags,         // <-- Icono Categorías
-  ArrowLeftRight, // <-- Icono Transacciones
-  ChevronDown,  // <-- Flecha del menú
+  Wallet,
+  Landmark,
+  Tags,
+  ArrowLeftRight,
+  ShoppingBag,
+  Wrench,
+  ShoppingCart,
+  Calendar,
+  Clock,
+  ClipboardList,
+  Settings,
+  LogOut,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 
-// 1. Actualizar interfaz para soportar sub-menús
 interface NavItem {
-  label: string;
-  href?: string; // Opcional porque el padre a veces no redirige
-  icon: React.ReactNode;
+  label:    string;
+  href?:    string;
+  icon:     React.ReactNode;
   children?: NavItem[];
+  section?: string; // ← para agrupar
 }
-
-const navItems: NavItem[] = [
+interface NavSection {
+  label: string;
+  items: NavItem[];
+}
+// ── Items agrupados por sección ────────────────────────────────────────────
+const NAV_SECTIONS: NavSection[] = [
   {
-    label: "Dashboard",
-    href: "/dashboard", // Quité el /es para que funcione con next-intl routing
-    icon: <LayoutDashboard size={20} />,
+    label: "Principal",
+    items: [
+      { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={18} /> },
+    ],
   },
   {
-    label: "Clientes",
-    href: "/clients",
-    icon: <UserCircle size={20} />,
+    label: "Gestión",
+    items: [
+      { label: "Clientes",   href: "/clients",      icon: <UserCircle  size={18} /> },
+      { label: "Usuarios",   href: "/users",         icon: <Users       size={18} /> },
+      { label: "Horarios",   href: "/schedules",     icon: <Clock       size={18} /> },
+    ],
   },
   {
-    label: "Usuarios",
-    href: "/users",
-    icon: <Users size={20} />,
+    label: "Operaciones",
+    items: [
+      { label: "Citas",          href: "/appointments", icon: <Calendar    size={18} /> },
+      { label: "Sesiones",       href: "/sessions",     icon: <ClipboardList size={18} /> },
+      { label: "Punto de Venta", href: "/pos",          icon: <ShoppingCart size={18} /> },
+    ],
   },
   {
-    label: "Productos",
-    href: "/products",
-    icon: <UserCircle size={20} />,
+    label: "Catálogo",
+    items: [
+      { label: "Productos", href: "/products", icon: <ShoppingBag size={18} /> },
+      { label: "Servicios", href: "/services", icon: <Wrench      size={18} /> },
+    ],
   },
-  {
-    label: "Servicios",
-    href: "/services",
-    icon: <UserCircle size={20} />,
-  },
-  // 2. Agregar el menú de Finanzas
   {
     label: "Finanzas",
-    icon: <Wallet size={20} />,
-    children: [
+    items: [
       {
-        label: "Préstamos",
-        href: "/finance/loans",
-        icon: <Landmark size={18} />,
-      },
-      {
-        label: "Categorías",
-        href: "/finance/categories",
-        icon: <Tags size={18} />,
-      },
-      {
-        label: "Transacciones",
-        href: "/finance/transactions",
-        icon: <ArrowLeftRight size={18} />,
+        label: "Finanzas",
+        icon:  <Wallet size={18} />,
+        children: [
+          { label: "Préstamos",     href: "/finance/loans",        icon: <Landmark       size={16} /> },
+          { label: "Categorías",    href: "/finance/categories",   icon: <Tags           size={16} /> },
+          { label: "Transacciones", href: "/finance/transactions", icon: <ArrowLeftRight size={16} /> },
+        ],
       },
     ],
   },
 ];
 
 export function Sidebar() {
-  const pathname = usePathname();
+  const pathname                            = usePathname();
   const { sidebarCollapsed, toggleSidebar } = useUiStore();
-  const { user } = useAuthStore();
-  
-  // 3. Estado para controlar qué menús están abiertos
-  const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const { user, role, logout }              = useAuthStore();
+  const [openMenus, setOpenMenus]           = useState<string[]>([]);
 
-  const toggleMenu = (label: string) => {
+  function toggleMenu(label: string) {
     setOpenMenus((prev) =>
-      prev.includes(label) ? prev.filter((item) => item !== label) : [...prev, label]
+      prev.includes(label)
+        ? prev.filter((i) => i !== label)
+        : [...prev, label]
     );
-  };
+  }
+
+  function getLocalePrefix(): string {
+    const match = pathname.match(/^\/(en|es)/);
+    return match ? match[0] : "/es";
+  }
+
+  function isActive(href: string): boolean {
+    const prefix = getLocalePrefix();
+    return (
+      pathname === `${prefix}${href}` ||
+      pathname.startsWith(`${prefix}${href}/`)
+    );
+  }
+
+  // ── Calcular completitud del perfil ───────────────────────────────────
+  const profileFields = [
+    user?.phone, user?.type_document,
+    user?.document_number, user?.address, user?.city,
+  ];
+  const profileComplete = profileFields.filter(Boolean).length;
+  const profilePct      = Math.round((profileComplete / profileFields.length) * 100);
+  const profileIncomplete = profilePct < 100;
 
   return (
-    <aside
-      className={cn(
-        styles.sidebar,
-        sidebarCollapsed && styles.collapsed
-      )}
-    >
-      {/* Logo */}
+    <aside className={cn(styles.sidebar, sidebarCollapsed && styles.collapsed)}>
+
+      {/* ── Logo ──────────────────────────────────────────────────────── */}
       <div className={styles.logo}>
-        <Scissors size={24} className={styles.logoIcon} />
+        <div className={styles.logoIconWrapper}>
+          <Scissors size={18} />
+        </div>
         {!sidebarCollapsed && (
           <span className={styles.logoText}>LuxuryBeauty</span>
         )}
       </div>
 
-      {/* Nav */}
+      {/* ── Nav ───────────────────────────────────────────────────────── */}
       <nav className={styles.nav}>
-        {navItems.map((item) => {
-          // Lógica para items con sub-menú (ej. Finanzas)
-          if (item.children) {
-            const isOpen = openMenus.includes(item.label);
-            // Verificar si alguna ruta hija está activa para resaltar el padre
-            const isChildActive = item.children.some((child) =>
-              pathname.startsWith(child.href ?? "")
-            );
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.label} className={styles.section}>
 
-            return (
-              <div key={item.label}>
-                <button
-                  onClick={() => toggleMenu(item.label)}
+            {/* Label de sección — solo cuando no está colapsado */}
+            {!sidebarCollapsed && (
+              <span className={styles.sectionLabel}>{section.label}</span>
+            )}
+
+            {section.items.map((item) => {
+
+              // ── Item con submenú ──────────────────────────────────────
+              if (item.children) {
+                const isOpen        = openMenus.includes(item.label);
+                const isChildActive = item.children.some((c) =>
+                  c.href ? isActive(c.href) : false
+                );
+
+                return (
+                  <div key={item.label}>
+                    <button
+                      onClick={() => toggleMenu(item.label)}
+                      className={cn(
+                        styles.navItem,
+                        styles.parentItem,
+                        isChildActive && styles.active
+                      )}
+                    >
+                      <span className={styles.navIcon}>{item.icon}</span>
+                      {!sidebarCollapsed && (
+                        <>
+                          <span className={styles.navLabel}>{item.label}</span>
+                          <ChevronDown
+                            size={14}
+                            className={cn(
+                              styles.chevron,
+                              isOpen && styles.chevronOpen
+                            )}
+                          />
+                        </>
+                      )}
+                      {sidebarCollapsed && (
+                        <span className={styles.tooltip}>{item.label}</span>
+                      )}
+                    </button>
+
+                    {!sidebarCollapsed && isOpen && (
+                      <div className={styles.submenu}>
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href ?? ""}
+                            className={cn(
+                              styles.navItem,
+                              styles.childItem,
+                              child.href && isActive(child.href) && styles.active
+                            )}
+                          >
+                            <span className={styles.navIcon}>{child.icon}</span>
+                            <span className={styles.navLabel}>{child.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // ── Item normal ───────────────────────────────────────────
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href ?? ""}
                   className={cn(
                     styles.navItem,
-                    styles.parentItem, // Nuevo estilo
-                    isChildActive && styles.active
+                    item.href && isActive(item.href) && styles.active
                   )}
                 >
                   <span className={styles.navIcon}>{item.icon}</span>
                   {!sidebarCollapsed && (
-                    <>
-                      <span className={styles.navLabel}>{item.label}</span>
-                      <ChevronDown
-                        size={16}
-                        className={cn(
-                          styles.chevron,
-                          isOpen && styles.chevronOpen
-                        )}
-                      />
-                    </>
+                    <span className={styles.navLabel}>{item.label}</span>
                   )}
-                </button>
-
-                {/* Renderizar sub-menús si está abierto y el sidebar no está colapsado */}
-                {!sidebarCollapsed && isOpen && (
-                  <div className={styles.submenu}>
-                    {item.children.map((child) => {
-                      const isChildItemActive = pathname.startsWith(child.href ?? "");
-                      return (
-                        <Link
-                          href={child.href ?? ""}
-                          key={child.href}
-                          className={cn(
-                            styles.navItem,
-                            styles.childItem, // Nuevo estilo
-                            isChildItemActive && styles.active
-                          )}
-                        >
-                          <span className={styles.navIcon}>{child.icon}</span>
-                          <span className={styles.navLabel}>{child.label}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            );
-          }
-
-          // Lógica normal para items sin sub-menú
-          const isActive = pathname.startsWith(item.href ?? "");
-          return (
-            <Link
-              href={item.href ?? ""}
-              key={item.href}
-              className={cn(styles.navItem, isActive && styles.active)}
-            >
-              <span className={styles.navIcon}>{item.icon}</span>
-              {!sidebarCollapsed && (
-                <span className={styles.navLabel}>{item.label}</span>
-              )}
-              {sidebarCollapsed && (
-                <span className={styles.tooltip}>{item.label}</span>
-              )}
-            </Link>
-          );
-        })}
+                  {sidebarCollapsed && (
+                    <span className={styles.tooltip}>{item.label}</span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
-      {/* User info */}
-      {!sidebarCollapsed && user && (
-        <div className={styles.userInfo}>
-          <div className={styles.avatar}>
-            {user.name.charAt(0).toUpperCase()}
-          </div>
-          <div className={styles.userDetails}>
-            <p className={styles.userName}>{user.name}</p>
-            <p className={styles.userRole}>{user.roles[0]?.name ?? "—"}</p>
-          </div>
-        </div>
-      )}
+      {/* ── Footer: perfil + logout ───────────────────────────────────── */}
+      <div className={styles.footer}>
 
-      {/* Toggle button */}
+        {/* Link al perfil */}
+        <Link
+          href="/profile"
+          className={cn(
+            styles.profileBtn,
+            isActive("/profile") && styles.profileBtnActive
+          )}
+        >
+          <div className={styles.avatarWrapper}>
+            <div className={styles.avatar}>
+              {user?.name.charAt(0).toUpperCase() ?? "?"}
+            </div>
+            {/* Indicador de perfil incompleto */}
+            {profileIncomplete && (
+              <span className={styles.profileDot} title="Perfil incompleto" />
+            )}
+          </div>
+
+          {!sidebarCollapsed && (
+            <div className={styles.profileInfo}>
+              <p className={styles.profileName}>{user?.name ?? "—"}</p>
+              <p className={styles.profileRole}>{role ?? "—"}</p>
+              {/* Barra de completitud mini */}
+              <div className={styles.miniBar}>
+                <div
+                  className={styles.miniBarFill}
+                  style={{ width: `${profilePct}%` }}
+                />
+              </div>
+            </div>
+          )}
+        </Link>
+
+        {/* Logout */}
+        <button
+          className={styles.logoutBtn}
+          onClick={logout}
+          title="Cerrar sesión"
+        >
+          <LogOut size={16} />
+          {!sidebarCollapsed && <span>Salir</span>}
+        </button>
+      </div>
+
+      {/* ── Toggle ────────────────────────────────────────────────────── */}
       <button className={styles.toggleBtn} onClick={toggleSidebar}>
-        {sidebarCollapsed ? (
-          <ChevronRight size={16} />
-        ) : (
-          <ChevronLeft size={16} />
-        )}
+        {sidebarCollapsed
+          ? <ChevronRight size={14} />
+          : <ChevronLeft  size={14} />
+        }
       </button>
     </aside>
   );

@@ -1,31 +1,38 @@
 import { api } from "@/lib/api/client";
 import type {
   Employee,
-  UpdateEmployeeDto,
-  EmployeeFilters,
+  UpdatePersonDto,
+  PersonFilters,
 } from "@/types/user.types";
+import type { Client } from "@/types/client.types";
 import type { PaginatedResponse } from "@/types/api.types";
 
 export const userService = {
-  getAll: (filters?: EmployeeFilters) => {
-    const params = new URLSearchParams();
-    if (filters?.search) params.set("search", filters.search);
-    if (filters?.per_page) params.set("per_page", String(filters.per_page));
-    if (filters?.page) params.set("page", String(filters.page));
-    if (filters?.role) params.set("role", filters.role);
-    console.log(filters?.role)
-    const query = params.toString();
-    const res = api.get<PaginatedResponse<Employee>>(
-      `users${query ? `?${query}` : ""}`
+  // ── Empleados ─────────────────────────────────────────────────────────
+  getAll: (filters?: PersonFilters) => {
+    const p = new URLSearchParams();
+    if (filters?.search) p.set("search", filters.search);
+    if (filters?.per_page) p.set("per_page", String(filters.per_page));
+    if (filters?.page) p.set("page", String(filters.page));
+    if (filters?.role) p.set("role", filters.role);
+    const query = p.toString();
+    return api.get<PaginatedResponse<Employee>>(
+      `users${query ? `?${query}` : ""}`,
     );
-    
-    return res;
   },
-
-  getById: (id: number) => api.get<Employee>(`users/${id}`),
-
-  update: (id: number, data: UpdateEmployeeDto) =>
+  // Agregar en userService
+  create: (data: any) => api.post<Employee>("users", data),
+  // ── Actualizar empleado → PUT /users/{id} ─────────────────────────────
+  updateEmployee: (id: number, data: UpdatePersonDto) =>
     api.put<Employee>(`users/${id}`, data),
 
-  create: (data: UpdateEmployeeDto) => api.post<Employee>("users", data),
+  // ── Actualizar cliente → PUT /clients/{id} ────────────────────────────
+  updateClient: (id: number, data: UpdatePersonDto) =>
+    api.put<Client>(`clients/${id}`, data),
+
+  // ── Método genérico — decide endpoint según _type ─────────────────────
+  update: (id: number, data: UpdatePersonDto, type: "employee" | "client") =>
+    type === "client"
+      ? userService.updateClient(id, data)
+      : userService.updateEmployee(id, data),
 };

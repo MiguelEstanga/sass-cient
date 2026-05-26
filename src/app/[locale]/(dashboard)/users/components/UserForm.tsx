@@ -3,195 +3,159 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuthStore } from "@/stores/auth.store";
+import { z } from "zod";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
-import {
-  updateEmployeeSchema,
-  type UpdateEmployeeFormValues,
-} from "@/lib/validations/user.schema";
-import type { Employee } from "@/types/user.types";
-import styles from "../styles/UserForm.module.css";
-import { Roles } from "@/types/roles.types";
+import { useAuthStore } from "@/stores/auth.store";
+import { roleService } from "@/services/role.service";
+import styles from "./UserCreateForm.module.css";
+
+const createUserSchema = z.object({
+  name:            z.string().min(1, "El nombre es obligatorio"),
+  email:           z.string().email("Correo inválido"),
+  password:        z.string().min(6, "Mínimo 6 caracteres"),
+  phone:           z.string().optional().or(z.literal("")),
+  number_prefix:   z.string().optional(),
+  type_document:   z.string().optional(),
+  document_number: z.string().optional().or(z.literal("")),
+  address:         z.string().optional().or(z.literal("")),
+  city:            z.string().optional().or(z.literal("")),
+  zip:             z.string().optional().or(z.literal("")),
+  role_id:         z.number({  }),
+});
+
+type CreateUserFormValues = z.infer<typeof createUserSchema>;
 
 interface Props {
-  defaultValues?: Partial<Employee>;
-  onSubmit: (values: UpdateEmployeeFormValues) => Promise<void>;
-  onCancel: () => void;
+  onSubmit:      (values: CreateUserFormValues) => Promise<void>;
+  onCancel:      () => void;
   isSubmitting?: boolean;
-  roles?: Roles[];
 }
 
-export function UserForm({
-  defaultValues,
-  onSubmit,
-  onCancel,
-  isSubmitting,
-  roles,
-}: Props) {
+export function UserCreateForm({ onSubmit, onCancel, isSubmitting }: Props) {
   const { prefixes, typeDocuments } = useAuthStore();
+  const [roles, setRoles]           = useState<{ value: number; label: string }[]>([]);
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm<UpdateEmployeeFormValues>({
-    resolver: zodResolver(updateEmployeeSchema),
+  } = useForm<CreateUserFormValues>({
+    resolver: zodResolver(createUserSchema),
   });
 
   useEffect(() => {
-    if (defaultValues) {
-      reset({
-        name: defaultValues.name ?? "",
-        email: defaultValues.email ?? "",
-        phone: defaultValues.phone ?? "",
-        password: "",
-        type_document: defaultValues.type_document ?? "",
-        document_number: defaultValues.document_number ?? "",
-        address: defaultValues.address ?? "",
-        city: defaultValues.city ?? "",
-        zip: defaultValues.zip ?? "",
-        number_prefix: defaultValues.number_prefix ?? "",
-        is_active: defaultValues.is_active,
-      });
-    } else {
-      reset({});
-    }
-  }, [defaultValues, reset]);
+    roleService.getAll().then((res) => {
+      setRoles(res.map((r: any) => ({ value: r.id, label: r.name })));
+    });
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
-      <Input
-        label="Nombre completo"
-        fullWidth
-        required
-        error={errors.name?.message}
-        {...register("name")}
-      />
+    <div className={styles.form}>
 
-      <Input
-        label="Correo electrónico"
-        type="email"
-        fullWidth
-        required
-        error={errors.email?.message}
-        {...register("email")}
-      />
-
-      {/* Prefijo + Teléfono */}
-      <div className={styles.phoneRow}>
-        <Select
-          label="Prefijo"
-          options={prefixes.map((p) => ({
-            value: p.prefix,
-            label: p.prefix,
-          }))}
-          placeholder="—"
-          {...register("number_prefix")}
+      {/* Info básica */}
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Información básica</h3>
+        <Input
+          label="Nombre completo"
+          fullWidth
+          required
+          error={errors.name?.message}
+          {...register("name")}
         />
         <Input
-          label="Teléfono"
-          placeholder="4142345678"
+          label="Correo electrónico"
+          type="email"
           fullWidth
-          error={errors.phone?.message}
-          {...register("phone")}
-        />
-      </div>
-      {roles ? (
-        <Select
-          fullWidth
-          label="Role"
-          options={roles.map((role) => ({
-            value: role.id,
-            label: role.name,
-          }))}
-          placeholder="—"
-       
-          {...register("role_id")}
-        />
-      ) : null}
-
-      {/* Tipo + Número documento */}
-      <div className={styles.row}>
-        <Select
-          label="Tipo de documento"
-          options={typeDocuments.map((d) => ({
-            value: d.name,
-            label: d.name,
-          }))}
-          placeholder="—"
-          fullWidth
-          {...register("type_document")}
+          required
+          error={errors.email?.message}
+          {...register("email")}
         />
         <Input
-          label="Número"
-          fullWidth
-          error={errors.document_number?.message}
-          {...register("document_number")}
-        />
-      </div>
-
-      <Input
-        label="Dirección"
-        fullWidth
-        error={errors.address?.message}
-        {...register("address")}
-      />
-
-      <div className={styles.row}>
-        <Input
-          label="Ciudad"
-          fullWidth
-          error={errors.city?.message}
-          {...register("city")}
-        />
-        <Input
-          label="Código postal"
-          fullWidth
-          error={errors.zip?.message}
-          {...register("zip")}
-        />
-      </div>
-
-      {/* Nueva contraseña — opcional */}
-      {defaultValues ? (
-        <Input
-          label="Nueva contraseña"
+          label="Contraseña"
           type="password"
-          placeholder="Dejar vacío para no cambiar"
           fullWidth
-          hint="Solo completa si deseas cambiar la contraseña"
+          required
           error={errors.password?.message}
           {...register("password")}
         />
-      ) : null}
-
-      {/* Toggle is_active */}
-      <div className={styles.toggleRow}>
-        <label className={styles.toggleLabel}>
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            {...register("is_active")}
+        <div className={styles.row}>
+          <Select
+            label="Prefijo"
+            options={prefixes.map((p) => ({ value: p.prefix, label: p.prefix }))}
+            placeholder="—"
+            {...register("number_prefix")}
           />
-          <span>Usuario activo</span>
-        </label>
-        <p className={styles.toggleHint}>
-          Los usuarios inactivos no pueden iniciar sesión
-        </p>
+          <Input
+            label="Teléfono"
+            fullWidth
+            error={errors.phone?.message}
+            {...register("phone")}
+          />
+        </div>
+      </div>
+
+      {/* Rol */}
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Rol</h3>
+        <Select
+          label="Rol del usuario"
+          options={roles}
+          placeholder="Seleccionar rol..."
+          fullWidth
+          error={errors.role_id?.message}
+          {...register("role_id", { valueAsNumber: true })}
+        />
+      </div>
+
+      {/* Documento */}
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Documento</h3>
+        <div className={styles.row}>
+          <Select
+            label="Tipo"
+            options={typeDocuments.map((d) => ({ value: d.name, label: d.name }))}
+            placeholder="—"
+            fullWidth
+            {...register("type_document")}
+          />
+          <Input
+            label="Número"
+            fullWidth
+            error={errors.document_number?.message}
+            {...register("document_number")}
+          />
+        </div>
+      </div>
+
+      {/* Dirección */}
+      <div className={styles.section}>
+        <h3 className={styles.sectionTitle}>Dirección (opcional)</h3>
+        <Input
+          label="Dirección"
+          fullWidth
+          {...register("address")}
+        />
+        <div className={styles.row}>
+          <Input label="Ciudad" fullWidth {...register("city")} />
+          <Input label="Código postal" fullWidth {...register("zip")} />
+        </div>
       </div>
 
       {/* Footer */}
       <div className={styles.footer}>
-        <Button type="button" variant="secondary" fullWidth onClick={onCancel}>
+        <Button type="button" variant="secondary" onClick={onCancel}>
           Cancelar
         </Button>
-        <Button type="submit" fullWidth loading={isSubmitting}>
-          Guardar cambios
+        <Button
+          type="button"
+          loading={isSubmitting}
+          onClick={handleSubmit(onSubmit)}
+        >
+          Crear usuario
         </Button>
       </div>
-    </form>
+    </div>
   );
 }

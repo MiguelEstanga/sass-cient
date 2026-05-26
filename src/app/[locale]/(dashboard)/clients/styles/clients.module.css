@@ -95,3 +95,20 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
+
+/* Agregar al CSS existente */
+.emailSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.emailHint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--color-primary);
+}

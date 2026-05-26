@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import styles from "./SaleTypeModal.module.css";
+
 import { useTranslations } from "next-intl";
 interface Props {
   open: boolean;

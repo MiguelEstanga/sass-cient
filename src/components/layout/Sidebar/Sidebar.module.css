@@ -1,240 +1,372 @@
+/* ── Base ────────────────────────────────────────────────────────────────── */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: var(--sidebar-width);
-  background: var(--color-text);
-  display: flex;
+  position:       fixed;
+  top:            0;
+  left:           0;
+  height:         100vh;
+  width:          var(--sidebar-width);
+  background:     #0f172a;
+  display:        flex;
   flex-direction: column;
-  transition: width var(--transition-slow);
-  z-index: var(--z-sticky);
-  overflow: hidden;
+  transition:     width var(--transition-slow);
+  z-index:        var(--z-sticky);
+  overflow:       hidden;
 }
 
 .collapsed {
   width: var(--sidebar-width-collapsed);
 }
 
-/* Logo */
+/* ── Logo ────────────────────────────────────────────────────────────────── */
 .logo {
-  display: flex;
+  display:     flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-lg);
-  height: var(--header-height);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-
-.logoIcon {
-  color: var(--color-primary);
+  gap:         var(--spacing-sm);
+  padding:     0 var(--spacing-md);
+  height:      var(--header-height);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   flex-shrink: 0;
 }
 
-.logoText {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: #fff;
-  white-space: nowrap;
+.logoIconWrapper {
+  width:           32px;
+  height:          32px;
+  border-radius:   var(--radius-md);
+  background:      var(--color-primary);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  color:           #fff;
+  flex-shrink:     0;
 }
 
-/* Nav */
+.logoText {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color:       #fff;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* ── Nav ─────────────────────────────────────────────────────────────────── */
 .nav {
-  flex: 1;
-  display: flex;
+  flex:       1;
+  display:    flex;
   flex-direction: column;
-  gap: 2px;
-  padding: var(--spacing-md) var(--spacing-sm);
+  gap:        var(--spacing-xs);
+  padding:    var(--spacing-md) var(--spacing-sm);
   overflow-y: auto;
   overflow-x: hidden;
+
+  /* Scrollbar sutil */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
 }
 
+.nav::-webkit-scrollbar       { width: 4px; }
+.nav::-webkit-scrollbar-track { background: transparent; }
+.nav::-webkit-scrollbar-thumb {
+  background:    rgba(255,255,255,0.1);
+  border-radius: 2px;
+}
+
+/* ── Secciones ───────────────────────────────────────────────────────────── */
+.section {
+  display:        flex;
+  flex-direction: column;
+  gap:            1px;
+  margin-bottom:  var(--spacing-sm);
+}
+
+.sectionLabel {
+  font-size:      9px;
+  font-weight:    var(--font-weight-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color:          rgba(255,255,255,0.25);
+  padding:        0 var(--spacing-sm);
+  margin-bottom:  2px;
+  white-space:    nowrap;
+}
+
+/* ── Nav items ───────────────────────────────────────────────────────────── */
 .navItem {
-  position: relative;
-  display: flex;
+  position:    relative;
+  display:     flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: 10px var(--spacing-sm);
+  gap:         var(--spacing-sm);
+  padding:     8px var(--spacing-sm);
   border-radius: var(--radius-md);
-  color: rgba(255, 255, 255, 0.65);
+  color:       rgba(255,255,255,0.55);
   text-decoration: none;
-  transition: background var(--transition-fast), color var(--transition-fast);
+  transition:  all var(--transition-fast);
   white-space: nowrap;
-  overflow: hidden;
+  font-size:   var(--font-size-sm);
 }
 
 .navItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: rgba(255,255,255,0.07);
+  color:      rgba(255,255,255,0.9);
 }
 
 .active {
   background: var(--color-primary) !important;
-  color: #fff !important;
+  color:      #fff !important;
+}
+
+.active .navIcon {
+  color: #fff;
 }
 
 .navIcon {
-  flex-shrink: 0;
-  display: flex;
+  display:     flex;
   align-items: center;
+  flex-shrink: 0;
+  color:       inherit;
 }
 
 .navLabel {
-  font-size: var(--font-size-sm);
+  font-size:   var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  overflow:    hidden;
+  text-overflow: ellipsis;
 }
 
-/* Tooltip al colapsar */
+/* ── Tooltip colapsado ───────────────────────────────────────────────────── */
 .tooltip {
-  display: none;
-  position: absolute;
-  left: calc(var(--sidebar-width-collapsed) + 8px);
-  background: var(--color-text);
-  color: #fff;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: var(--shadow-md);
-  z-index: var(--z-dropdown);
+  display:         none;
+  position:        absolute;
+  left:            calc(100% + 12px);
+  top:             50%;
+  transform:       translateY(-50%);
+  background:      #1e293b;
+  color:           #fff;
+  padding:         6px 10px;
+  border-radius:   var(--radius-md);
+  font-size:       var(--font-size-xs);
+  white-space:     nowrap;
+  pointer-events:  none;
+  box-shadow:      var(--shadow-lg);
+  z-index:         var(--z-dropdown);
+  border:          1px solid rgba(255,255,255,0.08);
+}
+
+.tooltip::before {
+  content:      "";
+  position:     absolute;
+  right:        100%;
+  top:          50%;
+  transform:    translateY(-50%);
+  border:       5px solid transparent;
+  border-right-color: #1e293b;
 }
 
 .collapsed .navItem:hover .tooltip {
   display: block;
 }
 
-/* User info */
-.userInfo {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-md);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  overflow: hidden;
+/* ── Parent / submenú ────────────────────────────────────────────────────── */
+.parentItem {
+  width:       100%;
+  background:  none;
+  border:      none;
+  text-align:  left;
+  cursor:      pointer;
+  font-family: inherit;
+  justify-content: flex-start;
 }
 
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+.chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color:       rgba(255,255,255,0.25);
+  transition:  transform var(--transition-fast);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  display:        flex;
+  flex-direction: column;
+  gap:            1px;
+  margin-top:     2px;
+  padding-left:   var(--spacing-md);
+  border-left:    1px solid rgba(255,255,255,0.08);
+  margin-left:    var(--spacing-md);
+  animation:      slideDown 0.15s ease;
+}
+
+.childItem {
+  padding:   6px var(--spacing-sm);
+  font-size: var(--font-size-xs) !important;
+  color:     rgba(255,255,255,0.45);
+}
+
+.childItem:hover {
+  color: rgba(255,255,255,0.85);
+}
+
+.childItem.active {
+  background: rgba(var(--color-primary-rgb), 0.8) !important;
+  color:      #fff !important;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.footer {
+  border-top:  1px solid rgba(255,255,255,0.06);
+  padding:     var(--spacing-sm);
+  display:     flex;
+  flex-direction: column;
+  gap:         2px;
   flex-shrink: 0;
 }
 
-.userDetails {
-  overflow: hidden;
+/* Link al perfil */
+.profileBtn {
+  display:       flex;
+  align-items:   center;
+  gap:           var(--spacing-sm);
+  padding:       var(--spacing-sm);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition:    background var(--transition-fast);
+  cursor:        pointer;
 }
 
-.userName {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.profileBtn:hover {
+  background: rgba(255,255,255,0.07);
 }
 
-.userRole {
-  font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: capitalize;
+.profileBtnActive {
+  background: rgba(255,255,255,0.1) !important;
 }
 
-/* Toggle button */
-.toggleBtn {
-  position: absolute;
-  bottom: 80px;
-  right: -12px;
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
+.avatarWrapper {
+  position:    relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width:           32px;
+  height:          32px;
+  border-radius:   var(--radius-full);
+  background:      linear-gradient(135deg, var(--color-primary), #7c3aed);
+  color:           #fff;
+  display:         flex;
+  align-items:     center;
   justify-content: center;
-  cursor: pointer;
-  border: 2px solid var(--color-bg);
-  box-shadow: var(--shadow-sm);
-  transition: background var(--transition-fast);
-  z-index: 10;
+  font-size:       var(--font-size-sm);
+  font-weight:     var(--font-weight-bold);
+}
+
+/* Punto naranja de perfil incompleto */
+.profileDot {
+  position:      absolute;
+  top:           -2px;
+  right:         -2px;
+  width:         8px;
+  height:        8px;
+  border-radius: var(--radius-full);
+  background:    #f59e0b;
+  border:        2px solid #0f172a;
+  animation:     pulse 2s ease infinite;
+}
+
+.profileInfo {
+  flex:     1;
+  overflow: hidden;
+}
+
+.profileName {
+  font-size:     var(--font-size-xs);
+  font-weight:   var(--font-weight-semibold);
+  color:         rgba(255,255,255,0.9);
+  margin:        0;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+}
+
+.profileRole {
+  font-size:     9px;
+  color:         rgba(255,255,255,0.35);
+  margin:        0;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+}
+
+/* Barra de completitud mini */
+.miniBar {
+  height:        2px;
+  background:    rgba(255,255,255,0.1);
+  border-radius: var(--radius-full);
+  margin-top:    4px;
+  overflow:      hidden;
+}
+
+.miniBarFill {
+  height:        100%;
+  background:    var(--color-primary);
+  border-radius: var(--radius-full);
+  transition:    width 0.5s ease;
+}
+
+/* Botón logout */
+.logoutBtn {
+  display:       flex;
+  align-items:   center;
+  gap:           var(--spacing-sm);
+  padding:       8px var(--spacing-sm);
+  border:        none;
+  background:    none;
+  border-radius: var(--radius-md);
+  color:         rgba(255,255,255,0.35);
+  cursor:        pointer;
+  font-size:     var(--font-size-xs);
+  font-weight:   var(--font-weight-medium);
+  transition:    all var(--transition-fast);
+  width:         100%;
+  text-align:    left;
+}
+
+.logoutBtn:hover {
+  background: rgba(239,68,68,0.15);
+  color:      #f87171;
+}
+
+/* ── Toggle ──────────────────────────────────────────────────────────────── */
+.toggleBtn {
+  position:        absolute;
+  bottom:          96px;
+  right:           -10px;
+  width:           20px;
+  height:          20px;
+  border-radius:   var(--radius-full);
+  background:      var(--color-primary);
+  color:           #fff;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  cursor:          pointer;
+  border:          2px solid #0f172a;
+  box-shadow:      var(--shadow-sm);
+  transition:      background var(--transition-fast);
+  z-index:         10;
 }
 
 .toggleBtn:hover {
   background: var(--color-primary-hover);
 }
 
-/* ===================================
-   ESTILOS PARA SUBMENÚS (FINANZAS)
-   =================================== */
-
-/* El botón del padre (ej: 'Finanzas') */
-.parentItem {
-  cursor: pointer;
-  width: 100%;
-  background: none;
-  border: none;
-  text-align: left;
-  color: rgba(255, 255, 255, 0.65); /* Igual que .navItem */
-  font-family: inherit;
-  font-size: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; 
-  padding: 10px var(--spacing-sm); /* Igual que .navItem */
-  border-radius: var(--radius-md);
-  transition: background var(--transition-fast), color var(--transition-fast);
-  white-space: nowrap;
-  overflow: hidden;
+/* ── Animaciones ─────────────────────────────────────────────────────────── */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
-.parentItem:hover {
-  background: rgba(255, 255, 255, 0.08); /* Igual que .navItem:hover */
-  color: #fff; /* Igual que .navItem:hover */
-}
-
-/* Contenedor de las opciones hijas */
-.submenu {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 4px;
-  margin-bottom: 8px;
-  padding-left: 12px; 
-  margin-left: 20px;
-  /* Línea lateral sutil que se vea en fondo oscuro */
-  border-left: 2px solid rgba(255, 255, 255, 0.15); 
-}
-
-/* Cada opción hija (ej: 'Préstamos') */
-.childItem {
-  padding: 8px var(--spacing-sm); /* Un poco más compacto */
-  font-size: var(--font-size-sm); /* Usa tu variable, no hardcodeado */
-  font-weight: var(--font-weight-medium);
-  color: rgba(255, 255, 255, 0.55); /* Un poco más tenue que el menú principal */
-  border-radius: var(--radius-md);
-}
-
-.childItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
-/* La flechita que gira */
-.chevron {
-  transition: transform 0.2s ease-in-out;
-  color: rgba(255, 255, 255, 0.4); /* Color tenue para que no moleste */
-  flex-shrink: 0;
-}
-
-.chevronOpen {
-  transform: rotate(180deg);
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.6; transform: scale(1.2); }
 }

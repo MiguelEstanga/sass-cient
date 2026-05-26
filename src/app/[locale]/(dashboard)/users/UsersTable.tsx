@@ -19,7 +19,12 @@ export function UsersTable({ data, offset, onEdit }: Props) {
       render: (row) => (
         <div>
           <strong>{row.name}</strong>
-          <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-muted)" }}>
+          <p
+            style={{
+              fontSize: "var(--font-size-xs)",
+              color: "var(--color-text-muted)",
+            }}
+          >
             {row.email}
           </p>
         </div>
@@ -31,7 +36,7 @@ export function UsersTable({ data, offset, onEdit }: Props) {
       render: (row) =>
         row.number_prefix && row.phone
           ? `${row.number_prefix} ${row.phone}`
-          : row.phone ?? "—",
+          : (row.phone ?? "—"),
     },
     {
       key: "type_document",
@@ -39,7 +44,7 @@ export function UsersTable({ data, offset, onEdit }: Props) {
       render: (row) => row.type_document ?? "—",
     },
     {
-      key:"document_number",
+      key: "document_number",
       header: "Número de documento",
       render: (row) => row.document_number ?? "—",
     },
@@ -48,9 +53,7 @@ export function UsersTable({ data, offset, onEdit }: Props) {
       header: "Rol",
       width: "120px",
       render: (row) => (
-        <Badge variant="info">
-          {row.roles[0]?.name ?? "—"}
-        </Badge>
+        <Badge variant="info">{row.roles[0]?.name ?? "—"}</Badge>
       ),
     },
     {
@@ -78,7 +81,11 @@ export function UsersTable({ data, offset, onEdit }: Props) {
       header: "Acciones",
       width: "100px",
       render: (row) => (
-        <Button variant="ghost" size="sm" onClick={() => onEdit(row)}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => onEdit({ ...row, _type: "employee" })}
+        >
           Editar
         </Button>
       ),

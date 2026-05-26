@@ -1,63 +1,71 @@
 .header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: var(--sidebar-width);
-  height: var(--header-height);
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
+  position:        fixed;
+  top:             0;
+  right:           0;
+  left:            var(--sidebar-width);
+  height:          var(--header-height);
+  background:      var(--color-bg-secondary);
+  border-bottom:   1px solid var(--color-border);
+  display:         flex;
+  align-items:     center;
   justify-content: space-between;
-  padding: 0 var(--spacing-xl);
-  z-index: var(--z-sticky);
-  transition: left var(--transition-slow);
-}
-
-.left {
-  display: flex;
-  align-items: center;
+  padding:         0 var(--spacing-xl);
+  z-index:         var(--z-sticky);
+  transition:      left var(--transition-slow),
+                   background var(--transition-fast);
+  backdrop-filter: blur(8px);
 }
 
 .greeting {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  font-size:  var(--font-size-sm);
+  color:      var(--color-text-secondary);
 }
 
 .greeting strong {
-  color: var(--color-text);
+  color:       var(--color-text);
   font-weight: var(--font-weight-semibold);
 }
 
 .right {
-  display: flex;
+  display:     flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap:         var(--spacing-md);
+}
+
+.left {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-sm);
 }
 
 .langSwitcher {
-  display: flex;
+  display:     flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  gap:         var(--spacing-xs);
+  font-size:   var(--font-size-sm);
+  color:       var(--color-text-muted);
 }
 
 .lang {
-  color: var(--color-text-muted);
-  text-decoration: none;
+  color:      var(--color-text-muted);
+  font-size:  var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   transition: color var(--transition-fast);
+  padding:    2px 4px;
+  border-radius: var(--radius-sm);
 }
 
 .lang:hover {
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .activeLang {
-  color: var(--color-primary);
-  font-weight: var(--font-weight-semibold);
+  color:       var(--color-primary);
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
 }
 
 .langDivider {
-  color: var(--color-border);
+  color:     var(--color-border);
+  font-size: var(--font-size-xs);
 }

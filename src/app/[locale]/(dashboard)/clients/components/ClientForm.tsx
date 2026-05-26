@@ -14,11 +14,12 @@ import {
 } from "@/lib/validations/client.schema";
 import type { Client } from "@/types/client.types";
 import styles from "../styles/ClientForm.module.css";
+
 interface Props {
   defaultValues?: Partial<Client>;
-  onSubmit: (values: ClientFormValues) => Promise<void>;
-  onCancel: () => void;
-  isSubmitting?: boolean;
+  onSubmit:       (values: ClientFormValues) => Promise<void>;
+  onCancel:       () => void;
+  isSubmitting?:  boolean;
 }
 
 export function ClientForm({
@@ -38,31 +39,32 @@ export function ClientForm({
     resolver: zodResolver(clientSchema),
   });
 
-  // Cargar valores al abrir el drawer en modo edición
   useEffect(() => {
     if (defaultValues) {
       reset({
-        name: defaultValues.name ?? "",
-        email: defaultValues.email ?? "",
-        phone: defaultValues.phone ?? "",
-        notes: defaultValues.notes ?? "",
-        type_document: defaultValues.type_document ?? "",
+        name:            defaultValues.name            ?? "",
+        email:           defaultValues.email           ?? "",
+        phone:           defaultValues.phone           ?? "",
+        notes:           defaultValues.notes           ?? "",
+        type_document:   defaultValues.type_document   ?? "",
         document_number: defaultValues.document_number ?? "",
-        address: defaultValues.address ?? "",
-        city: defaultValues.city ?? "",
-        number_prefix: defaultValues.number_prefix ?? "",
+        address:         defaultValues.address         ?? "",
+        city:            defaultValues.city            ?? "",
+        number_prefix:   defaultValues.number_prefix   ?? "",
       });
     } else {
-      reset({});
+      reset({
+        name: "", email: "", phone: "", notes: "",
+        type_document: "", document_number: "",
+        address: "", city: "", number_prefix: "",
+      });
     }
   }, [defaultValues, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className={styles.form}
-      noValidate
-    >
+    // ── div en vez de form para evitar nested form ────────────────────
+    <div className={styles.form}>
+
       <Input
         label="Nombre completo"
         placeholder="Ej: María González"
@@ -72,23 +74,26 @@ export function ClientForm({
         {...register("name")}
       />
 
-      <Input
-        label="Correo electrónico"
-        type="email"
-        placeholder="maria@email.com"
-        fullWidth
-        error={errors.email?.message}
-        {...register("email")}
-      />
+      {/* Email — opcional, si se pone se crea usuario */}
+      <div className={styles.emailSection}>
+        <Input
+          label="Correo electrónico"
+          type="email"
+          placeholder="maria@email.com (opcional)"
+          fullWidth
+          error={errors.email?.message}
+          {...register("email")}
+        />
+        <p className={styles.emailHint}>
+          💡 Si ingresas un correo, se creará automáticamente un usuario para el cliente
+        </p>
+      </div>
 
       {/* Prefijo + Teléfono */}
       <div className={styles.phoneRow}>
         <Select
           label="Prefijo"
-          options={prefixes.map((p) => ({
-            value: p.prefix,
-            label: p.prefix,
-          }))}
+          options={prefixes.map((p) => ({ value: p.prefix, label: p.prefix }))}
           placeholder="—"
           {...register("number_prefix")}
         />
@@ -101,14 +106,11 @@ export function ClientForm({
         />
       </div>
 
-      {/* Tipo + Número de documento */}
+      {/* Documento */}
       <div className={styles.row}>
         <Select
           label="Tipo de documento"
-          options={typeDocuments.map((d) => ({
-            value: d.name,
-            label: d.name,
-          }))}
+          options={typeDocuments.map((d) => ({ value: d.name, label: d.name }))}
           placeholder="—"
           fullWidth
           {...register("type_document")}
@@ -146,24 +148,20 @@ export function ClientForm({
         {...register("notes")}
       />
 
-      {/* Footer con botones */}
+      {/* Footer */}
       <div className={styles.footer}>
-        <Button
-          type="button"
-          variant="secondary"
-          fullWidth
-          onClick={onCancel}
-        >
+        <Button type="button" variant="secondary" fullWidth onClick={onCancel}>
           Cancelar
         </Button>
         <Button
-          type="submit"
+          type="button"
           fullWidth
           loading={isSubmitting}
+          onClick={handleSubmit(onSubmit)}
         >
           {defaultValues ? "Guardar cambios" : "Crear cliente"}
         </Button>
       </div>
-    </form>
+    </div>
   );
 }

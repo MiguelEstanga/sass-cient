@@ -189,5 +189,27 @@
     "noClient": "No client",
     "subtitleInProgress": "{count} in progress · {pending} pending",
     "subtitlePending": "{count} pending"
+  },
+  "appointments": {
+    "title": "Appointments",
+    "today": "Today",
+    "newAppointment": "New appointment",
+    "editAppointment": "Edit appointment",
+    "client": "Client",
+    "employee": "Employee",
+    "service": "Service",
+    "startTime": "Start time",
+    "cancel": "Cancel appointment",
+    "save": "Save changes",
+    "create": "Create appointment",
+    "created": "Appointment created successfully",
+    "updated": "Appointment updated",
+    "cancelled": "Appointment cancelled",
+    "moved": "Appointment moved",
+    "errorLoad": "Error loading appointments",
+    "errorCreate": "Error creating appointment",
+    "errorMove": "Error moving",
+    "errorCancel": "Error cancelling",
+    "back": "Back"
   }
 }

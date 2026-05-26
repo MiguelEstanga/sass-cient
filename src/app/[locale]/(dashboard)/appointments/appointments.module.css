@@ -1,0 +1,215 @@
+/* ── Page ────────────────────────────────────────────────────────────────── */
+.page {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ── Navegación ──────────────────────────────────────────────────────────── */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.navBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.navBtn:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+}
+
+.todayBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0 var(--spacing-md);
+  height: 34px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.todayBtn:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ── Calendario wrapper con scroll ───────────────────────────────────────── */
+.calendarWrapper {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+}
+
+/* ── Tabla del calendario ────────────────────────────────────────────────── */
+.calendar {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 700px;
+  table-layout: fixed;
+}
+
+/* ── Header de días ──────────────────────────────────────────────────────── */
+.timeCol {
+  width: 56px;
+  border-right: 1px solid var(--color-border);
+}
+
+.dayHeader {
+  padding: var(--spacing-sm) var(--spacing-xs);
+  text-align: center;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dayHeaderToday {
+  background: var(--color-primary-light);
+}
+
+.dayName {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dayNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  border-radius: var(--radius-full);
+  margin-top: 2px;
+}
+
+.dayNumToday {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* ── Filas de tiempo ─────────────────────────────────────────────────────── */
+.timeRow {
+  height: 16px;
+}
+
+.timeCell {
+  width: 56px;
+  border-right: 1px solid var(--color-border);
+  vertical-align: top;
+  padding: 0 var(--spacing-xs);
+  position: relative;
+}
+
+.timeLabel {
+  position: absolute;
+  top: -8px;
+  right: var(--spacing-xs);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ── Celdas de día ───────────────────────────────────────────────────────── */
+.dayCell {
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+  padding: 0;
+  position: relative;
+  vertical-align: top;
+}
+
+/* Línea más visible en horas exactas */
+.timeRow:nth-child(4n+1) .dayCell {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Slot droppable ──────────────────────────────────────────────────────── */
+.slot {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.slot:hover {
+  background: var(--color-primary-light);
+}
+
+.slotOver {
+  background: var(--color-primary-light) !important;
+  outline: 2px dashed var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* En appointments.module.css */
+.dayCell {
+  border-right:  1px solid var(--color-border);
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+  padding:       0;
+  position:      relative;
+  vertical-align: top;
+  overflow:      visible; /* ← asegurar que no corta */
+}
+
+.slot {
+  position: relative;
+  width:    100%;
+  cursor:   pointer;
+  transition: background var(--transition-fast);
+  overflow: visible; /* ← igual aquí */
+}
