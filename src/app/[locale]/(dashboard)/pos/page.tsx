@@ -22,12 +22,12 @@ export default function PosPage() {
 
   // ── Estado de modales ──────────────────────────────────────────────────
   const [typeModalOpen, setTypeModalOpen] = useState(false);
-  const [posOpen, setPosOpen]             = useState(false);
-  const [saleMode, setSaleMode]           = useState<"product" | "service">("product");
-  const [selectedSale, setSelectedSale]   = useState<Sale | null>(null);
+  const [posOpen, setPosOpen] = useState(false);
+  const [saleMode, setSaleMode] = useState<"product" | "service">("product");
+  const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
 
   // ── Estado del carrito ─────────────────────────────────────────────────
-  const [cart, setCart]           = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [isSelling, setIsSelling] = useState(false);
 
   // ── Paso 1: abrir selector de tipo ────────────────────────────────────
@@ -45,9 +45,14 @@ export default function PosPage() {
 
   // ── Paso 3: procesar checkout ──────────────────────────────────────────
   async function handleFinishSale(
-    client:        Client | null,
+    client: Client | null,
     paymentMethod: string,
-    mode:          "product" | "service",
+    mode: "product" | "service",
+    membershipData?: {
+      membership_subscription_id: number;
+      credits_used: number;
+      discount_applied: number;
+    },
   ) {
     if (!client) {
       toast.error("Debes seleccionar un cliente antes de cobrar");
@@ -70,18 +75,18 @@ export default function PosPage() {
           if (mode === "product" && item.product) {
             return {
               product_id: item.product.id,
-              quantity:   item.quantity,
-              price:      parseFloat(String(item.product.price)),
-              status:     "pending",
+              quantity: item.quantity,
+              price: parseFloat(String(item.product.price)),
+              status: "pending",
             };
           }
           if (mode === "service" && item.service) {
             return {
-              service_id:     item.service.id,
-              quantity:       item.quantity,
-              price:          parseFloat(String(item.service.price)),
+              service_id: item.service.id,
+              quantity: item.quantity,
+              price: parseFloat(String(item.service.price)),
               performance_id: item.employeeId,
-              status:         "pending",
+              status: "pending",
             };
           }
           return null;
@@ -92,23 +97,30 @@ export default function PosPage() {
         (sum, item) =>
           sum +
           parseFloat(
-            String(mode === "product" ? item.product?.price : item.service?.price)
-          ) * item.quantity,
-        0
+            String(
+              mode === "product" ? item.product?.price : item.service?.price,
+            ),
+          ) *
+            item.quantity,
+        0,
       );
 
       const payload: CreateSaleDto = {
-        type:           mode,
-        client_id:      client.id,
-        total:          totalAmount,
-        tax:            0,
+        type: mode,
+        client_id: client.id,
+        total: totalAmount,
+        tax: 0,
         payment_method: paymentMethod,
-        items:          itemsPayload as CreateSaleDto["items"],
+        items: itemsPayload as CreateSaleDto["items"],
+        membership_subscription_id:
+          membershipData?.membership_subscription_id ?? null,
+        credits_used: membershipData?.credits_used ?? null,
+        discount_applied: membershipData?.discount_applied ?? null,
       };
 
       const response = await saleService.processCheckout(payload);
       toast.success(
-        `Venta #${response.id} registrada por $${totalAmount.toFixed(2)}`
+        `Venta #${response.id} registrada por $${totalAmount.toFixed(2)}`,
       );
       setCart([]);
       setPosOpen(false);
@@ -120,7 +132,7 @@ export default function PosPage() {
         toast.error(err.getAllErrors().join(", "));
       } else {
         toast.error(
-          err instanceof ApiError ? err.message : "Error al procesar la venta"
+          err instanceof ApiError ? err.message : "Error al procesar la venta",
         );
       }
     } finally {
@@ -130,7 +142,6 @@ export default function PosPage() {
 
   return (
     <div className={styles.page}>
-
       {/* Header */}
       <div className={styles.pageHeader}>
         <div>
@@ -149,7 +160,9 @@ export default function PosPage() {
       {/* Tabla — expone su refresh via onRefreshReady ─────────────────── */}
       <SalesTable
         onViewDetail={setSelectedSale}
-        onRefreshReady={(fn) => { salesTableRefreshRef.current = fn; }}
+        onRefreshReady={(fn) => {
+          salesTableRefreshRef.current = fn;
+        }}
       />
 
       <SaleTypeModal

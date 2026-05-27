@@ -1,0 +1,136 @@
+.card {
+  background:     var(--color-bg-secondary);
+  border:         1px solid var(--color-border);
+  border-radius:  var(--radius-xl);
+  padding:        var(--spacing-lg);
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--spacing-sm);
+  transition:     all var(--transition-fast);
+  border-left:    3px solid transparent;
+}
+
+.status_active    { border-left-color: var(--color-success); }
+.status_paused    { border-left-color: var(--color-warning); }
+.status_cancelled { border-left-color: var(--color-error); opacity: 0.6; }
+.status_past_due  { border-left-color: var(--color-error); }
+.status_expired   { border-left-color: var(--color-text-muted); opacity: 0.6; }
+
+.cardHeader {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+}
+
+.clientInfo {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-sm);
+}
+
+.avatar {
+  width:           36px;
+  height:          36px;
+  border-radius:   var(--radius-full);
+  background:      var(--color-primary-light);
+  color:           var(--color-primary);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       var(--font-size-sm);
+  font-weight:     var(--font-weight-bold);
+  flex-shrink:     0;
+}
+
+.clientName {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color:       var(--color-text);
+  margin:      0;
+}
+
+.clientSub {
+  font-size: var(--font-size-xs);
+  color:     var(--color-text-muted);
+  margin:    0;
+}
+
+.planRow {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-xs);
+  font-size:   var(--font-size-sm);
+  color:       var(--color-text-secondary);
+}
+
+.planName {
+  flex: 1;
+}
+
+/* ── Créditos ─────────────────────────────────────────────────────────────── */
+.creditsSection {
+  display:        flex;
+  flex-direction: column;
+  gap:            6px;
+  padding:        var(--spacing-sm);
+  background:     var(--color-bg-tertiary);
+  border-radius:  var(--radius-md);
+}
+
+.creditsHeader {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+}
+
+.creditsLabel {
+  font-size: var(--font-size-xs);
+  color:     var(--color-text-muted);
+}
+
+.creditsValue {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-text);
+}
+
+.creditsTotal {
+  font-weight: var(--font-weight-normal);
+  color:       var(--color-text-muted);
+}
+
+.progressBar {
+  height:        6px;
+  background:    var(--color-border);
+  border-radius: var(--radius-full);
+  overflow:      hidden;
+}
+
+.progressFill {
+  height:        100%;
+  background:    var(--color-success);
+  border-radius: var(--radius-full);
+  transition:    width 0.4s ease;
+}
+
+/* ── Descuento ────────────────────────────────────────────────────────────── */
+.discountBadge {
+  font-size:     var(--font-size-xs);
+  color:         var(--color-warning);
+  background:    var(--color-warning-bg);
+  border-radius: var(--radius-md);
+  padding:       4px var(--spacing-sm);
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+.cardFooter {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  font-size:       var(--font-size-xs);
+  color:           var(--color-text-muted);
+  padding-top:     var(--spacing-sm);
+  border-top:      1px solid var(--color-border);
+  gap:             var(--spacing-sm);
+  flex-wrap:       wrap;
+}

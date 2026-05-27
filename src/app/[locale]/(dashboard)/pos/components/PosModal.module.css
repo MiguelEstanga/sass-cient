@@ -473,3 +473,76 @@
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* ── Membresía ───────────────────────────────────────────────────────────── */
+.membershipBox {
+  background:    var(--color-bg-tertiary);
+  border:        1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+  padding:       var(--spacing-sm);
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--spacing-xs);
+}
+
+.membershipHeader {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-xs);
+}
+
+.membershipIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.membershipName {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color:       var(--color-text);
+  margin:      0;
+}
+
+.membershipSub {
+  font-size: var(--font-size-xs);
+  color:     var(--color-text-muted);
+  margin:    0;
+}
+
+.membershipToggle {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-xs);
+  font-size:   var(--font-size-xs);
+  color:       var(--color-text-secondary);
+  cursor:      pointer;
+}
+
+.membershipBreakdown {
+  display:        flex;
+  flex-direction: column;
+  gap:            4px;
+  padding-top:    var(--spacing-xs);
+  border-top:     1px solid var(--color-border);
+}
+
+.breakdownRow {
+  display:         flex;
+  justify-content: space-between;
+  font-size:       var(--font-size-xs);
+  color:           var(--color-text-secondary);
+}
+
+.discount {
+  color: var(--color-success);
+  font-weight: var(--font-weight-semibold);
+}
+
+.breakdownTotal {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-text);
+  padding-top: 4px;
+  border-top:  1px solid var(--color-border);
+  margin-top:  2px;
+}

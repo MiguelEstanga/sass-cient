@@ -19,13 +19,15 @@ import { EmployeeSelector } from "@/components/ui/post/EmployeeSelector";
 
 // ── Tipos ──────────────────────────────────────────────────────────────────
 import type { Client } from "@/types/client.types";
-import type { CartItem } from "@/types/pos.types";
+import type { CartItem, MembershipDiscount } from "@/types/pos.types";
 import type { Product } from "@/types/product.types";
 import type { Service } from "@/types/services.types";
 import type { Employee } from "@/types/user.types";
 
 // ── Estilos ────────────────────────────────────────────────────────────────
 import styles from "./PosModal.module.css";
+import { MembershipSubscription } from "@/types/membership.types";
+import { membershipService } from "@/services/membership/membership.service";
 
 interface Props {
   open: boolean;
@@ -60,7 +62,11 @@ export function PosModal({
   // ── Estado local ───────────────────────────────────────────────────────
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
-
+  const [membership, setMembership] = useState<MembershipSubscription | null>(
+    null,
+  );
+  const [loadingMembership, setLoadingMembership] = useState(false);
+  const [applyMembership, setApplyMembership] = useState(false);
   // ── Fetchers memorizados ───────────────────────────────────────────────
   const productFetcher = useCallback(
     (params: FetchParams) => productService.getAll(params),
@@ -106,6 +112,22 @@ export function PosModal({
       setItemSearch("");
     }
   }, [open, setItemSearch]);
+
+  // ── Cargar membresía cuando se selecciona un cliente ──────────────────────
+  useEffect(() => {
+    if (!selectedClient) {
+      setMembership(null);
+      setApplyMembership(false);
+      return;
+    }
+
+    setLoadingMembership(true);
+    membershipService
+      .getClientMembership(selectedClient.id)
+      .then(setMembership)
+      .catch(() => setMembership(null))
+      .finally(() => setLoadingMembership(false));
+  }, [selectedClient]);
 
   // ── Bloquear scroll del body ───────────────────────────────────────────
   useEffect(() => {
@@ -193,13 +215,139 @@ export function PosModal({
 
   const handleCheckout = () => {
     if (!canCheckout) return;
-    onCheckout(selectedClient, paymentMethod, mode);
+    onCheckout(
+      selectedClient,
+      paymentMethod,
+      mode,
+      membershipDiscount
+        ? {
+            membership_subscription_id: membership!.id,
+            credits_used: membershipDiscount.creditsUsed,
+            discount_applied: membershipDiscount.discountAmt,
+          }
+        : undefined,
+    );
   };
 
+  // ── Calcular descuento según membresía ────────────────────────────────────
+  const membershipDiscount: MembershipDiscount | null = (() => {
+    if (!membership || !applyMembership) return null;
+
+    const plan = membership.plan;
+    if (!plan) return null;
+
+    const benefitType = plan.benefit_type;
+
+    // Créditos — cada crédito cubre un ítem del carrito
+    const creditsToUse =
+      benefitType === "credits" || benefitType === "both"
+        ? Math.min(membership.credits_available, cart.length)
+        : 0;
+
+    // Descuento — porcentaje sobre el total
+    const discountPct =
+      benefitType === "discount" || benefitType === "both"
+        ? parseFloat(String(plan.discount_percent ?? 0))
+        : 0;
+
+    const discountAmt = (subtotal * discountPct) / 100;
+    const creditAmt =
+      creditsToUse > 0
+        ? cart
+            .slice(0, creditsToUse)
+            .reduce((sum, i) => sum + i.price * i.quantity, 0)
+        : 0;
+
+    const finalTotal = Math.max(0, subtotal - discountAmt - creditAmt);
+
+    return {
+      type: benefitType,
+      creditsUsed: creditsToUse,
+      discountPct,
+      discountAmt,
+      finalTotal,
+    };
+  })();
   if (!open) return null;
+  // ── Total final con membresía aplicada ────────────────────────────────────
+  const finalTotal = membershipDiscount?.finalTotal ?? total;
 
   return (
     <div className={styles.overlay} onClick={(e) => e.stopPropagation()}>
+      {loadingMembership && (
+        <p
+          style={{
+            fontSize: "var(--font-size-xs)",
+            color: "var(--color-text-muted)",
+          }}
+        >
+          Verificando membresía...
+        </p>
+      )}
+
+      {membership && !loadingMembership && (
+        <div className={styles.membershipBox}>
+          <div className={styles.membershipHeader}>
+            <span className={styles.membershipIcon}>👑</span>
+            <div>
+              <p className={styles.membershipName}>{membership.plan?.name}</p>
+              <p className={styles.membershipSub}>
+                {membership.credits_available} créditos disponibles
+                {membership.plan?.discount_percent &&
+                  ` · ${membership.plan.discount_percent}% descuento`}
+              </p>
+            </div>
+          </div>
+
+          {/* Toggle para aplicar membresía */}
+          <label className={styles.membershipToggle}>
+            <input
+              type="checkbox"
+              checked={applyMembership}
+              onChange={(e) => setApplyMembership(e.target.checked)}
+            />
+            <span>Aplicar membresía</span>
+          </label>
+
+          {/* Desglose del descuento */}
+          {applyMembership && membershipDiscount && (
+            <div className={styles.membershipBreakdown}>
+              {membershipDiscount.creditsUsed > 0 && (
+                <div className={styles.breakdownRow}>
+                  <span>
+                    Créditos usados ({membershipDiscount.creditsUsed})
+                  </span>
+                  <span className={styles.discount}>
+                    -$
+                    {(
+                      membershipDiscount.discountAmt +
+                      (membershipDiscount.creditsUsed > 0
+                        ? cart
+                            .slice(0, membershipDiscount.creditsUsed)
+                            .reduce((s, i) => s + i.price * i.quantity, 0)
+                        : 0)
+                    ).toFixed(2)}
+                  </span>
+                </div>
+              )}
+              {membershipDiscount.discountPct > 0 && (
+                <div className={styles.breakdownRow}>
+                  <span>Descuento {membershipDiscount.discountPct}%</span>
+                  <span className={styles.discount}>
+                    -${membershipDiscount.discountAmt.toFixed(2)}
+                  </span>
+                </div>
+              )}
+              <div
+                className={`${styles.breakdownRow} ${styles.breakdownTotal}`}
+              >
+                <span>Total con membresía</span>
+                <span>${membershipDiscount.finalTotal.toFixed(2)}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {/* ══ IZQUIERDA ════════════════════════════════════════════════ */}
         <div className={styles.leftPanel}>
@@ -478,7 +626,7 @@ export function PosModal({
                   : !allItemsHaveEmployee
                     ? "Asigna ejecutores"
                     : t("checkout")
-                : `${t("checkout")} $${total.toFixed(2)}`}
+                : `${t("checkout")} $${finalTotal.toFixed(2)}`}
             </button>
           </div>
         </div>

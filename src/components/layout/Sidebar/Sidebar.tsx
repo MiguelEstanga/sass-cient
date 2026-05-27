@@ -26,13 +26,14 @@ import {
   ClipboardList,
   Settings,
   LogOut,
+  Crown,
 } from "lucide-react";
 import styles from "./Sidebar.module.css";
 
 interface NavItem {
-  label:    string;
-  href?:    string;
-  icon:     React.ReactNode;
+  label: string;
+  href?: string;
+  icon: React.ReactNode;
   children?: NavItem[];
   section?: string; // ← para agrupar
 }
@@ -45,30 +46,46 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "Principal",
     items: [
-      { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={18} /> },
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+        icon: <LayoutDashboard size={18} />,
+      },
     ],
   },
   {
     label: "Gestión",
     items: [
-      { label: "Clientes",   href: "/clients",      icon: <UserCircle  size={18} /> },
-      { label: "Usuarios",   href: "/users",         icon: <Users       size={18} /> },
-      { label: "Horarios",   href: "/schedules",     icon: <Clock       size={18} /> },
+      { label: "Clientes", href: "/clients", icon: <UserCircle size={18} /> },
+      { label: "Usuarios", href: "/users", icon: <Users size={18} /> },
+      { label: "Horarios", href: "/schedules", icon: <Clock size={18} /> },
     ],
   },
   {
     label: "Operaciones",
     items: [
-      { label: "Citas",          href: "/appointments", icon: <Calendar    size={18} /> },
-      { label: "Sesiones",       href: "/sessions",     icon: <ClipboardList size={18} /> },
-      { label: "Punto de Venta", href: "/pos",          icon: <ShoppingCart size={18} /> },
+      { label: "Citas", href: "/appointments", icon: <Calendar size={18} /> },
+      {
+        label: "Sesiones",
+        href: "/sessions",
+        icon: <ClipboardList size={18} />,
+      },
+      {
+        label: "Punto de Venta",
+        href: "/pos",
+        icon: <ShoppingCart size={18} />,
+      },
     ],
   },
   {
     label: "Catálogo",
     items: [
-      { label: "Productos", href: "/products", icon: <ShoppingBag size={18} /> },
-      { label: "Servicios", href: "/services", icon: <Wrench      size={18} /> },
+      {
+        label: "Productos",
+        href: "/products",
+        icon: <ShoppingBag size={18} />,
+      },
+      { label: "Servicios", href: "/services", icon: <Wrench size={18} /> },
     ],
   },
   {
@@ -76,28 +93,44 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       {
         label: "Finanzas",
-        icon:  <Wallet size={18} />,
+        icon: <Wallet size={18} />,
         children: [
-          { label: "Préstamos",     href: "/finance/loans",        icon: <Landmark       size={16} /> },
-          { label: "Categorías",    href: "/finance/categories",   icon: <Tags           size={16} /> },
-          { label: "Transacciones", href: "/finance/transactions", icon: <ArrowLeftRight size={16} /> },
+          {
+            label: "Préstamos",
+            href: "/finance/loans",
+            icon: <Landmark size={16} />,
+          },
+          {
+            label: "Categorías",
+            href: "/finance/categories",
+            icon: <Tags size={16} />,
+          },
+          {
+            label: "Transacciones",
+            href: "/finance/transactions",
+            icon: <ArrowLeftRight size={16} />,
+          },
         ],
       },
+    ],
+  },
+  {
+    label: "Gestión",
+    items: [
+      { label: "Membresías", href: "/memberships", icon: <Crown size={18} /> },
     ],
   },
 ];
 
 export function Sidebar() {
-  const pathname                            = usePathname();
+  const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebar } = useUiStore();
-  const { user, role, logout }              = useAuthStore();
-  const [openMenus, setOpenMenus]           = useState<string[]>([]);
+  const { user, role, logout } = useAuthStore();
+  const [openMenus, setOpenMenus] = useState<string[]>([]);
 
   function toggleMenu(label: string) {
     setOpenMenus((prev) =>
-      prev.includes(label)
-        ? prev.filter((i) => i !== label)
-        : [...prev, label]
+      prev.includes(label) ? prev.filter((i) => i !== label) : [...prev, label],
     );
   }
 
@@ -116,16 +149,18 @@ export function Sidebar() {
 
   // ── Calcular completitud del perfil ───────────────────────────────────
   const profileFields = [
-    user?.phone, user?.type_document,
-    user?.document_number, user?.address, user?.city,
+    user?.phone,
+    user?.type_document,
+    user?.document_number,
+    user?.address,
+    user?.city,
   ];
   const profileComplete = profileFields.filter(Boolean).length;
-  const profilePct      = Math.round((profileComplete / profileFields.length) * 100);
+  const profilePct = Math.round((profileComplete / profileFields.length) * 100);
   const profileIncomplete = profilePct < 100;
 
   return (
     <aside className={cn(styles.sidebar, sidebarCollapsed && styles.collapsed)}>
-
       {/* ── Logo ──────────────────────────────────────────────────────── */}
       <div className={styles.logo}>
         <div className={styles.logoIconWrapper}>
@@ -140,19 +175,17 @@ export function Sidebar() {
       <nav className={styles.nav}>
         {NAV_SECTIONS.map((section) => (
           <div key={section.label} className={styles.section}>
-
             {/* Label de sección — solo cuando no está colapsado */}
             {!sidebarCollapsed && (
               <span className={styles.sectionLabel}>{section.label}</span>
             )}
 
             {section.items.map((item) => {
-
               // ── Item con submenú ──────────────────────────────────────
               if (item.children) {
-                const isOpen        = openMenus.includes(item.label);
+                const isOpen = openMenus.includes(item.label);
                 const isChildActive = item.children.some((c) =>
-                  c.href ? isActive(c.href) : false
+                  c.href ? isActive(c.href) : false,
                 );
 
                 return (
@@ -162,7 +195,7 @@ export function Sidebar() {
                       className={cn(
                         styles.navItem,
                         styles.parentItem,
-                        isChildActive && styles.active
+                        isChildActive && styles.active,
                       )}
                     >
                       <span className={styles.navIcon}>{item.icon}</span>
@@ -173,7 +206,7 @@ export function Sidebar() {
                             size={14}
                             className={cn(
                               styles.chevron,
-                              isOpen && styles.chevronOpen
+                              isOpen && styles.chevronOpen,
                             )}
                           />
                         </>
@@ -192,11 +225,15 @@ export function Sidebar() {
                             className={cn(
                               styles.navItem,
                               styles.childItem,
-                              child.href && isActive(child.href) && styles.active
+                              child.href &&
+                                isActive(child.href) &&
+                                styles.active,
                             )}
                           >
                             <span className={styles.navIcon}>{child.icon}</span>
-                            <span className={styles.navLabel}>{child.label}</span>
+                            <span className={styles.navLabel}>
+                              {child.label}
+                            </span>
                           </Link>
                         ))}
                       </div>
@@ -212,7 +249,7 @@ export function Sidebar() {
                   href={item.href ?? ""}
                   className={cn(
                     styles.navItem,
-                    item.href && isActive(item.href) && styles.active
+                    item.href && isActive(item.href) && styles.active,
                   )}
                 >
                   <span className={styles.navIcon}>{item.icon}</span>
@@ -231,13 +268,12 @@ export function Sidebar() {
 
       {/* ── Footer: perfil + logout ───────────────────────────────────── */}
       <div className={styles.footer}>
-
         {/* Link al perfil */}
         <Link
           href="/profile"
           className={cn(
             styles.profileBtn,
-            isActive("/profile") && styles.profileBtnActive
+            isActive("/profile") && styles.profileBtnActive,
           )}
         >
           <div className={styles.avatarWrapper}>
@@ -278,10 +314,11 @@ export function Sidebar() {
 
       {/* ── Toggle ────────────────────────────────────────────────────── */}
       <button className={styles.toggleBtn} onClick={toggleSidebar}>
-        {sidebarCollapsed
-          ? <ChevronRight size={14} />
-          : <ChevronLeft  size={14} />
-        }
+        {sidebarCollapsed ? (
+          <ChevronRight size={14} />
+        ) : (
+          <ChevronLeft size={14} />
+        )}
       </button>
     </aside>
   );
