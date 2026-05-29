@@ -108,10 +108,14 @@ export default function PosPage() {
       const payload: CreateSaleDto = {
         type: mode,
         client_id: client.id,
-        total: totalAmount,
+        // Si hay descuento de membresía, restarlo del total
+        total: membershipData?.discount_applied
+          ? totalAmount - membershipData.discount_applied
+          : totalAmount,
         tax: 0,
         payment_method: paymentMethod,
         items: itemsPayload as CreateSaleDto["items"],
+        // Datos de membresía opcionales
         membership_subscription_id:
           membershipData?.membership_subscription_id ?? null,
         credits_used: membershipData?.credits_used ?? null,

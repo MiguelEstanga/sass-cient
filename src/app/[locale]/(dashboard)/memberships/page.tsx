@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Crown, UserPlus, Plus } from "lucide-react";
+import { Crown, UserPlus, Plus, CreditCard } from "lucide-react";
 import { membershipService } from "@/services/membership/membership.service";
 import { useToast } from "@/hooks/useToast";
 import { useConfirm } from "@/hooks/useConfirm";
@@ -15,46 +15,84 @@ import { PlanCard } from "./components/PlanCard";
 import { SubscriptionCard } from "./components/SubscriptionCard";
 import { PlanForm } from "./components/PlanForm";
 import { SubscribeForm } from "./components/SubscribeForm";
-import type { MembershipPlan, MembershipSubscription } from "@/types/membership.types";
-import type { PlanFormValues, SubscriptionFormValues } from "@/lib/validations/membership.schema";
+import type {
+  MembershipInvoice,
+  MembershipPlan,
+  MembershipSubscription,
+} from "@/types/membership.types";
+import type {
+  PlanFormValues,
+  SubscriptionFormValues,
+} from "@/lib/validations/membership.schema";
 import styles from "./memberships.module.css";
+import { InvoiceCard } from "./components/InvoiceCard";
 
-type Tab = "plans" | "subscriptions";
+type Tab = "plans" | "subscriptions" | "invoices";
 
 export default function MembershipsPage() {
-  const toast                       = useToast();
-  const { confirm, dialogProps }    = useConfirm();
-  const [activeTab, setActiveTab]   = useState<Tab>("plans");
+  const toast = useToast();
+  const { confirm, dialogProps } = useConfirm();
+  const [activeTab, setActiveTab] = useState<Tab>("plans");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerMode, setDrawerMode] = useState<"plan" | "subscribe">("plan");
-  const [editingPlan, setEditingPlan]   = useState<MembershipPlan | null>(null);
+  const [editingPlan, setEditingPlan] = useState<MembershipPlan | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [planSearch, setPlanSearch]     = useState("");
-  const [subSearch, setSubSearch]       = useState("");
-  const [subStatus, setSubStatus]       = useState("");
+  const [planSearch, setPlanSearch] = useState("");
+  const [subSearch, setSubSearch] = useState("");
+  const [subStatus, setSubStatus] = useState("");
+  const [invoiceStatus, setInvoiceStatus] = useState("");
 
+  const invoiceFetcher = useCallback(
+    (p: any) =>
+      membershipService.getInvoices({
+        ...p,
+        status: invoiceStatus || undefined,
+      }),
+    [invoiceStatus],
+  );
+
+  const {
+    rows: invoices,
+    loading: invoicesLoading,
+    refresh: refreshInvoices,
+  } = useLocalCache<MembershipInvoice>(invoiceFetcher, {
+    keyField: "id",
+    blockSize: 200,
+    pageSize: 20,
+  });
   // ── Cache planes ───────────────────────────────────────────────────────
   const planFetcher = useCallback(
     (p: any) => membershipService.getPlans({ ...p, search: planSearch }),
-    [planSearch]
+    [planSearch],
   );
   const {
-    rows: plans, loading: plansLoading, refresh: refreshPlans,
+    rows: plans,
+    loading: plansLoading,
+    refresh: refreshPlans,
   } = useLocalCache<MembershipPlan>(planFetcher, {
-    keyField: "id", blockSize: 100, pageSize: 50,
+    keyField: "id",
+    blockSize: 100,
+    pageSize: 50,
   });
 
   // ── Cache suscripciones ────────────────────────────────────────────────
   const subFetcher = useCallback(
-    (p: any) => membershipService.getSubscriptions({
-      ...p, search: subSearch, status: subStatus || undefined,
-    }),
-    [subSearch, subStatus]
+    (p: any) =>
+      membershipService.getSubscriptions({
+        ...p,
+        search: subSearch,
+        status: subStatus || undefined,
+      }),
+    [subSearch, subStatus],
   );
   const {
-    rows: subscriptions, loading: subsLoading, refresh: refreshSubs,
+    rows: subscriptions,
+    loading: subsLoading,
+    refresh: refreshSubs,
   } = useLocalCache<MembershipSubscription>(subFetcher, {
-    keyField: "id", blockSize: 500, pageSize: 20,
+    keyField: "id",
+    blockSize: 500,
+    pageSize: 20,
   });
 
   // ── Abrir drawers ──────────────────────────────────────────────────────
@@ -118,7 +156,7 @@ export default function MembershipsPage() {
   // ── Eliminar plan ──────────────────────────────────────────────────────
   function handleDeletePlan(plan: MembershipPlan) {
     confirm({
-      title:   "Eliminar plan",
+      title: "Eliminar plan",
       message: `¿Eliminar el plan "${plan.name}"? Solo se puede eliminar si no tiene suscripciones activas.`,
       onConfirm: async () => {
         try {
@@ -126,7 +164,9 @@ export default function MembershipsPage() {
           toast.success("Plan eliminado");
           refreshPlans();
         } catch (err) {
-          toast.error(err instanceof ApiError ? err.message : "Error al eliminar");
+          toast.error(
+            err instanceof ApiError ? err.message : "Error al eliminar",
+          );
         }
       },
     });
@@ -135,11 +175,15 @@ export default function MembershipsPage() {
   // ── Toggle activo/inactivo plan ────────────────────────────────────────
   async function handleTogglePlan(plan: MembershipPlan) {
     try {
-      await membershipService.updatePlan(plan.id, { is_active: !plan.is_active });
+      await membershipService.updatePlan(plan.id, {
+        is_active: !plan.is_active,
+      });
       toast.success(plan.is_active ? "Plan desactivado" : "Plan activado");
       refreshPlans();
     } catch (err) {
-      toast.error(err instanceof ApiError ? err.message : "Error al actualizar");
+      toast.error(
+        err instanceof ApiError ? err.message : "Error al actualizar",
+      );
     }
   }
 
@@ -149,16 +193,15 @@ export default function MembershipsPage() {
   }
 
   const STATUS_OPTIONS = [
-    { value: "",          label: "Todos los estados" },
-    { value: "active",    label: "Activas"           },
-    { value: "paused",    label: "Pausadas"          },
-    { value: "cancelled", label: "Canceladas"        },
-    { value: "expired",   label: "Expiradas"         },
+    { value: "", label: "Todos los estados" },
+    { value: "active", label: "Activas" },
+    { value: "paused", label: "Pausadas" },
+    { value: "cancelled", label: "Canceladas" },
+    { value: "expired", label: "Expiradas" },
   ];
 
   return (
     <div className={styles.page}>
-
       {/* ── Header ──────────────────────────────────────────────────── */}
       <div className={styles.pageHeader}>
         <div>
@@ -178,6 +221,14 @@ export default function MembershipsPage() {
               <UserPlus size={16} /> Suscribir cliente
             </Button>
           )}
+          {activeTab === "invoices" && (
+            <button
+              className={`${styles.tab} ${activeTab === "invoices" ? styles.tabActive : ""}`}
+              onClick={() => setActiveTab("invoices")}
+            >
+              <CreditCard size={15} /> Facturas
+            </button>
+          )}
         </div>
       </div>
 
@@ -194,6 +245,12 @@ export default function MembershipsPage() {
           onClick={() => setActiveTab("subscriptions")}
         >
           <UserPlus size={15} /> Suscripciones
+        </button>
+        <button
+          className={`${styles.tab} ${activeTab === "invoices" ? styles.tabActive : ""}`}
+          onClick={() => setActiveTab("invoices")}
+        >
+          <CreditCard size={15} /> Facturas
         </button>
       </div>
 
@@ -235,6 +292,45 @@ export default function MembershipsPage() {
       )}
 
       {/* ── Suscripciones ───────────────────────────────────────────── */}
+      {activeTab === "invoices" && (
+        <div className={styles.subsContent}>
+          <div className={styles.subsToolbar}>
+            <select
+              className={styles.statusFilter}
+              value={invoiceStatus}
+              onChange={(e) => setInvoiceStatus(e.target.value)}
+            >
+              <option value="">Todas</option>
+              <option value="pending">Pendientes</option>
+              <option value="paid">Pagadas</option>
+              <option value="failed">Fallidas</option>
+            </select>
+          </div>
+
+          {invoicesLoading ? (
+            <div className={styles.skeletons}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <SkeletonRow key={i} />
+              ))}
+            </div>
+          ) : invoices.length === 0 ? (
+            <div className={styles.empty}>
+              <CreditCard size={32} />
+              <p>No hay facturas</p>
+            </div>
+          ) : (
+            <div className={styles.cardsGrid}>
+              {invoices.map((invoice) => (
+                <InvoiceCard
+                  key={invoice.id}
+                  invoice={invoice}
+                  onUpdate={() => refreshInvoices()}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {activeTab === "subscriptions" && (
         <div className={styles.subsContent}>
           <div className={styles.subsToolbar}>
@@ -250,7 +346,9 @@ export default function MembershipsPage() {
               onChange={(e) => setSubStatus(e.target.value)}
             >
               {STATUS_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
               ))}
             </select>
           </div>
@@ -288,12 +386,16 @@ export default function MembershipsPage() {
         onClose={closeDrawer}
         title={
           drawerMode === "plan"
-            ? editingPlan ? "Editar plan" : "Nuevo plan"
+            ? editingPlan
+              ? "Editar plan"
+              : "Nuevo plan"
             : "Suscribir cliente"
         }
         subtitle={
           drawerMode === "plan"
-            ? editingPlan ? `Editando ${editingPlan.name}` : "Configura los beneficios del plan"
+            ? editingPlan
+              ? `Editando ${editingPlan.name}`
+              : "Configura los beneficios del plan"
             : "Asigna un plan de membresía a un cliente"
         }
       >

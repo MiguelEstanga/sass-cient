@@ -1,0 +1,173 @@
+.card {
+  background:     var(--color-bg-secondary);
+  border:         1px solid var(--color-border);
+  border-radius:  var(--radius-xl);
+  padding:        var(--spacing-lg);
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--spacing-sm);
+  transition:     all var(--transition-fast);
+  border-left:    3px solid transparent;
+}
+
+.cardOverdue {
+  border-left-color: var(--color-error);
+  background:        rgba(239, 68, 68, 0.03);
+}
+
+.cardHeader {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+}
+
+.iconBox {
+  width:           36px;
+  height:          36px;
+  border-radius:   var(--radius-md);
+  background:      var(--color-primary-light);
+  color:           var(--color-primary);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+}
+
+.statusIcon {
+  display:     flex;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.clientRow {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-sm);
+}
+
+.clientAvatar {
+  width:           32px;
+  height:          32px;
+  border-radius:   var(--radius-full);
+  background:      var(--color-primary-light);
+  color:           var(--color-primary);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       var(--font-size-sm);
+  font-weight:     var(--font-weight-bold);
+  flex-shrink:     0;
+}
+
+.clientName {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color:       var(--color-text);
+  margin:      0;
+}
+
+.planName {
+  font-size: var(--font-size-xs);
+  color:     var(--color-text-muted);
+  margin:    0;
+}
+
+.amountRow,
+.periodRow,
+.dueRow,
+.paidRow,
+.saleRow {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  font-size:       var(--font-size-xs);
+  padding:         2px 0;
+}
+
+.amountLabel,
+.periodLabel,
+.dueLabel,
+.paidLabel,
+.saleLabel {
+  color: var(--color-text-muted);
+}
+
+.amountValue {
+  font-size:   var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-text);
+}
+
+.periodValue,
+.saleValue {
+  color:       var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.dueValue {
+  color:       var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.dueOverdue .dueValue {
+  color:       var(--color-error);
+  font-weight: var(--font-weight-bold);
+}
+
+.paidValue {
+  color:       var(--color-success);
+  font-weight: var(--font-weight-medium);
+}
+
+.paymentSelector {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--spacing-sm);
+  padding:        var(--spacing-sm);
+  background:     var(--color-bg-tertiary);
+  border-radius:  var(--radius-md);
+  border:         1px solid var(--color-border);
+}
+
+.paymentLabel {
+  font-size:   var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color:       var(--color-text-secondary);
+  margin:      0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.paymentOptions {
+  display: flex;
+  gap:     var(--spacing-xs);
+}
+
+.paymentBtn {
+  flex:          1;
+  padding:       var(--spacing-xs) var(--spacing-sm);
+  background:    var(--color-bg);
+  border:        1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size:     var(--font-size-xs);
+  color:         var(--color-text-secondary);
+  cursor:        pointer;
+  transition:    all var(--transition-fast);
+  white-space:   nowrap;
+}
+
+.paymentBtn:hover {
+  border-color: var(--color-border-hover);
+}
+
+.paymentBtnActive {
+  background:   var(--color-primary-light);
+  border-color: var(--color-primary);
+  color:        var(--color-primary);
+  font-weight:  var(--font-weight-semibold);
+}
+
+.paymentActions {
+  display:         flex;
+  justify-content: flex-end;
+  gap:             var(--spacing-xs);
+}

@@ -1,111 +1,108 @@
-/* ── Overlay con blur ────────────────────────────────────────────────────── */
+/* ── Overlay ─────────────────────────────────────────────────────────────── */
 .overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  position:        fixed;
+  inset:           0;
+  background:      rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
-  z-index: var(--z-modal-backdrop);
-  display: flex;
-  align-items: center;
+  z-index:         var(--z-modal-backdrop);
+  display:         flex;
+  align-items:     center;
   justify-content: center;
-  padding: var(--spacing-lg);
+  padding:         var(--spacing-lg);
 }
 
-/* ── Modal: grid de 2 columnas izquierda/derecha ─────────────────────────── */
+/* ── Modal: 3 columnas ───────────────────────────────────────────────────── */
 .modal {
-  background: var(--color-bg);
+  background:    var(--color-bg);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  width: 100%;
-  max-width: 1100px;
-  height: 88vh;
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  border:        1px solid var(--color-border);
+  width:         100%;
+  max-width:     1200px;
+  height:        90vh;
+  display:       grid;
+  grid-template-columns: 1fr 320px 300px; /* carrito | shortcuts | checkout */
+  box-shadow:    var(--shadow-lg);
+  overflow:      hidden;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   IZQUIERDA — tabla del carrito
-   ══════════════════════════════════════════════════════════════════════════ */
+   COLUMNA 1 — Carrito
+══════════════════════════════════════════════════════════════════════════ */
 .leftPanel {
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  overflow: hidden;
-  border-right: 1px solid var(--color-border);
+  overflow:       hidden;
+  border-right:   1px solid var(--color-border);
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
 .header {
-  display: flex;
-  align-items: center;
+  display:         flex;
+  align-items:     center;
   justify-content: space-between;
-  padding: 12px var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-secondary);
-  flex-shrink: 0;
+  padding:         12px var(--spacing-lg);
+  border-bottom:   1px solid var(--color-border);
+  background:      var(--color-bg-secondary);
+  flex-shrink:     0;
 }
 
 .headerLeft {
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  gap: 2px;
+  gap:            2px;
 }
 
 .modeTag {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
+  font-size:      var(--font-size-xs);
+  font-weight:    var(--font-weight-semibold);
+  color:          var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .title {
-  font-size: var(--font-size-base);
+  font-size:   var(--font-size-base);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  margin: 0;
+  color:       var(--color-text);
+  margin:      0;
 }
 
 .closeBtn {
-  background: none;
-  border: 1px solid var(--color-border);
+  background:    none;
+  border:        1px solid var(--color-border);
   border-radius: var(--radius-md);
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
+  width:         30px;
+  height:        30px;
+  display:       flex;
+  align-items:   center;
   justify-content: center;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
+  cursor:        pointer;
+  color:         var(--color-text-muted);
+  font-size:     var(--font-size-sm);
+  transition:    all var(--transition-fast);
+  flex-shrink:   0;
 }
 
 .closeBtn:hover {
   background: var(--color-bg-tertiary);
-  color: var(--color-text);
+  color:      var(--color-text);
 }
 
-/* ── Buscador ────────────────────────────────────────────────────────────── */
 .searchContainer {
-  padding: 10px var(--spacing-lg);
+  padding:       10px var(--spacing-lg);
   border-bottom: 1px solid var(--color-border);
-  flex-shrink: 0;
+  flex-shrink:   0;
 }
 
-/* ── Tabla de items ──────────────────────────────────────────────────────── */
 .cartTableWrapper {
-  flex: 1;
+  flex:       1;
   overflow-y: auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding:    var(--spacing-md) var(--spacing-lg);
 }
 
 .cartTable {
-  width: 100%;
+  width:           100%;
   border-collapse: collapse;
-  font-size: var(--font-size-sm);
+  font-size:       var(--font-size-sm);
 }
 
 .cartTable thead tr {
@@ -113,224 +110,217 @@
 }
 
 .cartTable th {
-  padding: 6px 8px;
-  text-align: left;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
+  padding:        6px 8px;
+  text-align:     left;
+  font-size:      var(--font-size-xs);
+  font-weight:    var(--font-weight-semibold);
+  color:          var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  white-space: nowrap;
+  white-space:    nowrap;
 }
 
-.cartTable th.right { text-align: right; }
+.cartTable th.right  { text-align: right;  }
 .cartTable th.center { text-align: center; }
 
 .cartTable td {
-  padding: 10px 8px;
-  border-bottom: 1px solid var(--color-border);
+  padding:        10px 8px;
+  border-bottom:  1px solid var(--color-border);
   vertical-align: middle;
 }
 
-.cartTable tbody tr:last-child td {
-  border-bottom: none;
-}
+.cartTable tbody tr:last-child td { border-bottom: none; }
 
 .cartTable tbody tr:hover {
   background: var(--color-bg-secondary);
 }
 
-/* ── Nombre del item en la tabla ─────────────────────────────────────────── */
 .itemName {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  white-space: nowrap;
-  overflow: hidden;
+  font-weight:   var(--font-weight-medium);
+  color:         var(--color-text);
+  white-space:   nowrap;
+  overflow:      hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  max-width:     200px;
 }
 
 .itemSub {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-size:  var(--font-size-xs);
+  color:      var(--color-text-muted);
   margin-top: 2px;
 }
 
-/* ── Controles de cantidad inline ────────────────────────────────────────── */
 .qtyControls {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
+  display:       inline-flex;
+  align-items:   center;
+  gap:           4px;
+  background:    var(--color-bg-secondary);
+  border:        1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  padding: 2px;
+  padding:       2px;
 }
 
 .qtyBtn {
-  width: 22px;
-  height: 22px;
-  border-radius: var(--radius-sm);
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+  width:           22px;
+  height:          22px;
+  border-radius:   var(--radius-sm);
+  background:      none;
+  border:          none;
+  cursor:          pointer;
+  display:         flex;
+  align-items:     center;
   justify-content: center;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-secondary);
-  transition: all var(--transition-fast);
-  line-height: 1;
+  font-size:       var(--font-size-base);
+  font-weight:     var(--font-weight-bold);
+  color:           var(--color-text-secondary);
+  transition:      all var(--transition-fast);
+  line-height:     1;
 }
 
 .qtyBtn:hover {
   background: var(--color-border);
-  color: var(--color-text);
+  color:      var(--color-text);
 }
 
 .qtyValue {
-  min-width: 20px;
-  text-align: center;
-  font-size: var(--font-size-sm);
+  min-width:   20px;
+  text-align:  center;
+  font-size:   var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color:       var(--color-text);
 }
 
-/* ── Precio / Total en tabla ─────────────────────────────────────────────── */
 .priceCell {
   text-align: right;
-  color: var(--color-text);
+  color:      var(--color-text);
   white-space: nowrap;
 }
 
 .totalCell {
-  text-align: right;
+  text-align:  right;
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color:       var(--color-text);
   white-space: nowrap;
 }
 
-/* ── Botón eliminar item ─────────────────────────────────────────────────── */
 .removeBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-lg);
-  line-height: 1;
-  padding: 2px 4px;
+  background:    none;
+  border:        none;
+  cursor:        pointer;
+  color:         var(--color-text-muted);
+  font-size:     var(--font-size-lg);
+  line-height:   1;
+  padding:       2px 4px;
   border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
+  transition:    all var(--transition-fast);
 }
 
 .removeBtn:hover {
-  color: var(--color-error);
+  color:      var(--color-error);
   background: var(--color-error-bg);
 }
 
-/* ── Estado vacío del carrito ────────────────────────────────────────────── */
 .emptyCart {
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  align-items: center;
+  align-items:    center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-2xl) 0;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  gap:            var(--spacing-sm);
+  padding:        var(--spacing-2xl) 0;
+  color:          var(--color-text-muted);
+  font-size:      var(--font-size-sm);
 }
 
 .emptyCartIcon {
   font-size: 2.5rem;
-  opacity: 0.35;
+  opacity:   0.35;
 }
 
-/* ── Footer con totales ──────────────────────────────────────────────────── */
 .cartFooter {
-  border-top: 1px solid var(--color-border);
-  padding: 12px var(--spacing-lg);
-  background: var(--color-bg-secondary);
-  flex-shrink: 0;
-  display: flex;
+  border-top:     1px solid var(--color-border);
+  padding:        12px var(--spacing-lg);
+  background:     var(--color-bg-secondary);
+  flex-shrink:    0;
+  display:        flex;
   flex-direction: column;
-  gap: 4px;
+  gap:            4px;
 }
 
 .footerRow {
-  display: flex;
+  display:     flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .footerLabel {
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color:     var(--color-text-secondary);
 }
 
 .footerValue {
   font-size: var(--font-size-sm);
-  color: var(--color-text);
+  color:     var(--color-text);
 }
 
 .footerDivider {
-  border: none;
+  border:     none;
   border-top: 1px solid var(--color-border);
-  margin: 4px 0;
+  margin:     4px 0;
 }
 
 .totalLabel {
-  font-size: var(--font-size-base);
+  font-size:   var(--font-size-base);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+  color:       var(--color-text);
 }
 
 .totalValue {
-  font-size: var(--font-size-xl);
+  font-size:   var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text);
+  color:       var(--color-text);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   DERECHA — grid de shortcuts + checkout
-   ══════════════════════════════════════════════════════════════════════════ */
+   COLUMNA 2 — Shortcuts (productos/servicios)
+══════════════════════════════════════════════════════════════════════════ */
 .rightPanel {
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  background: var(--color-bg-secondary);
-  overflow: hidden;
+  background:     var(--color-bg-secondary);
+  overflow:       hidden;
+  border-right:   1px solid var(--color-border);
 }
 
-/* ── Grid de shortcuts ───────────────────────────────────────────────────── */
 .shortcutsGrid {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px;
-  display: grid;
+  flex:                  1;
+  overflow-y:            auto;
+  padding:               10px;
+  display:               grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  align-content: start;
+  gap:                   8px;
+  align-content:         start;
 }
 
 .shortcutCard {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  background:    var(--color-bg);
+  border:        1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 10px 8px;
-  cursor: pointer;
-  display: flex;
+  padding:       14px 10px; /* ← más padding */
+  cursor:        pointer;
+  display:       flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-  transition: all var(--transition-fast);
+  align-items:   center;
+  gap:           6px;
+  text-align:    center;
+  transition:    all var(--transition-fast);
+  min-height:    100px; /* ← más altura */
 }
 
 .shortcutCard:hover {
   border-color: var(--color-primary);
-  background: var(--color-primary-light);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  background:   var(--color-primary-light);
+  transform:    translateY(-2px);
+  box-shadow:   var(--shadow-md);
 }
 
 .shortcutCard:active {
@@ -338,125 +328,129 @@
 }
 
 .shortcutIcon {
-  font-size: 1.6rem;
+  font-size: 2rem; /* ← más grande */
   line-height: 1;
 }
 
 .shortcutName {
-  font-size: var(--font-size-xs);
+  font-size:   var(--font-size-sm); /* ← más legible */
   font-weight: var(--font-weight-medium);
-  color: var(--color-text);
+  color:       var(--color-text);
   line-height: 1.3;
-  word-break: break-word;
+  word-break:  break-word;
 }
 
 .shortcutPrice {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-primary);
 }
 
-/* ── Skeleton de carga para shortcuts ────────────────────────────────────── */
 .skeletonCard {
-  height: 90px;
+  height:     100px;
   background: linear-gradient(
     90deg,
     var(--color-bg-tertiary) 25%,
-    var(--color-border) 50%,
+    var(--color-border)      50%,
     var(--color-bg-tertiary) 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.4s ease infinite;
-  border-radius: var(--radius-md);
+  animation:       shimmer 1.4s ease infinite;
+  border-radius:   var(--radius-md);
 }
 
-/* ── Paginación del grid ─────────────────────────────────────────────────── */
 .paginationContainer {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-top: 1px solid var(--color-border);
-  display: flex;
+  padding:         var(--spacing-xs) var(--spacing-sm);
+  border-top:      1px solid var(--color-border);
+  display:         flex;
   justify-content: center;
-  flex-shrink: 0;
-  background: var(--color-bg-secondary);
+  flex-shrink:     0;
+  background:      var(--color-bg-secondary);
 }
 
-/* ── Checkout ────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════
+   COLUMNA 3 — Checkout (cliente + pago + cobrar)
+══════════════════════════════════════════════════════════════════════════ */
 .checkoutSection {
-  border-top: 1px solid var(--color-border);
-  padding: 10px 12px;
-  background: var(--color-bg);
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  gap: 8px;
-  flex-shrink: 0;
+  gap:            var(--spacing-md);
+  padding:        var(--spacing-md);
+  background:     var(--color-bg);
+  overflow-y:     auto;
+  justify-content: center;
+  height:         100%;
 }
 
+/* ── Título de sección ───────────────────────────────────────────────────── */
 .checkoutField {
-  display: flex;
+  display:        flex;
   flex-direction: column;
-  gap: 4px;
+  gap:            6px;
 }
 
 .checkoutLabel {
-  font-size: 10px;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
+  font-size:      10px;
+  font-weight:    var(--font-weight-bold);
+  color:          var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .required {
-  color: var(--color-error);
+  color:       var(--color-error);
   margin-left: 2px;
 }
 
-/* ── Métodos de pago compactos ───────────────────────────────────────────── */
+/* ── Métodos de pago ─────────────────────────────────────────────────────── */
 .paymentMethods {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 4px;
+  gap:     6px;
 }
 
 .methodBtn {
-  padding: 6px 4px;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 11px;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
+  padding:         10px 4px;
+  background:      var(--color-bg-secondary);
+  border:          1px solid var(--color-border);
+  border-radius:   var(--radius-md);
+  font-size:       var(--font-size-xs);
+  font-weight:     var(--font-weight-medium);
+  color:           var(--color-text-secondary);
+  cursor:          pointer;
+  transition:      all var(--transition-fast);
+  display:         flex;
+  align-items:     center;
   justify-content: center;
-  gap: 3px;
-  white-space: nowrap;
+  gap:             4px;
+  white-space:     nowrap;
+  flex-direction:  column;
 }
 
 .methodBtn:hover {
   border-color: var(--color-border-hover);
-  color: var(--color-text);
+  color:        var(--color-text);
 }
 
 .methodActive {
-  background: var(--color-primary-light);
+  background:   var(--color-primary-light);
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color:        var(--color-primary);
 }
 
 /* ── Botón cobrar ────────────────────────────────────────────────────────── */
 .checkoutBtn {
-  width: 100%;
-  padding: 10px;
-  background: var(--color-success);
-  color: #fff;
-  border: none;
+  width:         100%;
+  padding:       14px;
+  background:    var(--color-success);
+  color:         #fff;
+  border:        none;
   border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  transition: opacity var(--transition-fast);
+  font-size:     var(--font-size-base);
+  font-weight:   var(--font-weight-bold);
+  cursor:        pointer;
+  transition:    opacity var(--transition-fast);
+  margin-top:    auto;
 }
 
 .checkoutBtn:hover:not(:disabled) {
@@ -465,24 +459,19 @@
 
 .checkoutBtn:disabled {
   background: var(--color-text-muted);
-  cursor: not-allowed;
-  font-size: var(--font-size-xs);
-}
-
-@keyframes shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  cursor:     not-allowed;
+  font-size:  var(--font-size-xs);
 }
 
 /* ── Membresía ───────────────────────────────────────────────────────────── */
 .membershipBox {
-  background:    var(--color-bg-tertiary);
-  border:        1px solid rgba(99, 102, 241, 0.3);
-  border-radius: var(--radius-md);
-  padding:       var(--spacing-sm);
-  display:       flex;
+  background:     var(--color-bg-secondary);
+  border:         1px solid rgba(99, 102, 241, 0.3);
+  border-radius:  var(--radius-md);
+  padding:        var(--spacing-sm);
+  display:        flex;
   flex-direction: column;
-  gap:           var(--spacing-xs);
+  gap:            var(--spacing-xs);
 }
 
 .membershipHeader {
@@ -491,10 +480,7 @@
   gap:         var(--spacing-xs);
 }
 
-.membershipIcon {
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
+.membershipIcon { font-size: 1.2rem; flex-shrink: 0; }
 
 .membershipName {
   font-size:   var(--font-size-sm);
@@ -534,7 +520,7 @@
 }
 
 .discount {
-  color: var(--color-success);
+  color:       var(--color-success);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -545,4 +531,10 @@
   padding-top: 4px;
   border-top:  1px solid var(--color-border);
   margin-top:  2px;
+}
+
+/* ── Animaciones ─────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
 }

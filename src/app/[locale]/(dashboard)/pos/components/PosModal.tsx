@@ -28,6 +28,7 @@ import type { Employee } from "@/types/user.types";
 import styles from "./PosModal.module.css";
 import { MembershipSubscription } from "@/types/membership.types";
 import { membershipService } from "@/services/membership/membership.service";
+import { userService } from "@/services/user.service";
 
 interface Props {
   open: boolean;
@@ -39,6 +40,12 @@ interface Props {
     client: Client | null,
     paymentMethod: string,
     mode: "product" | "service",
+    membershipData?: {
+      // ← agregar
+      membership_subscription_id: number;
+      credits_used: number;
+      discount_applied: number;
+    },
   ) => void;
 }
 
@@ -79,6 +86,18 @@ export function PosModal({
     [],
   );
 
+  const employeeFetcher = useCallback(
+    (params: FetchParams) =>
+      userService.getAll({ ...params, role: "employee" }),
+    [],
+  );
+
+  const { rows: employees } = useLocalCache<Employee>(employeeFetcher, {
+    keyField: "id",
+    blockSize: 500,
+    pageSize: 50,
+  });
+
   // ── Caché de items ─────────────────────────────────────────────────────
   const {
     rows: items,
@@ -113,19 +132,25 @@ export function PosModal({
     }
   }, [open, setItemSearch]);
 
-  // ── Cargar membresía cuando se selecciona un cliente ──────────────────────
+  // Agrega temporalmente en el useEffect de membresía
   useEffect(() => {
     if (!selectedClient) {
       setMembership(null);
       setApplyMembership(false);
       return;
     }
-
+    console.log("🔍 Buscando membresía para cliente:", selectedClient.id);
     setLoadingMembership(true);
     membershipService
       .getClientMembership(selectedClient.id)
-      .then(setMembership)
-      .catch(() => setMembership(null))
+      .then((data) => {
+        console.log("👑 Membresía encontrada:", data);
+        setMembership(data);
+      })
+      .catch((err) => {
+        console.log("❌ Sin membresía:", err);
+        setMembership(null);
+      })
       .finally(() => setLoadingMembership(false));
   }, [selectedClient]);
 
@@ -274,82 +299,8 @@ export function PosModal({
 
   return (
     <div className={styles.overlay} onClick={(e) => e.stopPropagation()}>
-      {loadingMembership && (
-        <p
-          style={{
-            fontSize: "var(--font-size-xs)",
-            color: "var(--color-text-muted)",
-          }}
-        >
-          Verificando membresía...
-        </p>
-      )}
-
-      {membership && !loadingMembership && (
-        <div className={styles.membershipBox}>
-          <div className={styles.membershipHeader}>
-            <span className={styles.membershipIcon}>👑</span>
-            <div>
-              <p className={styles.membershipName}>{membership.plan?.name}</p>
-              <p className={styles.membershipSub}>
-                {membership.credits_available} créditos disponibles
-                {membership.plan?.discount_percent &&
-                  ` · ${membership.plan.discount_percent}% descuento`}
-              </p>
-            </div>
-          </div>
-
-          {/* Toggle para aplicar membresía */}
-          <label className={styles.membershipToggle}>
-            <input
-              type="checkbox"
-              checked={applyMembership}
-              onChange={(e) => setApplyMembership(e.target.checked)}
-            />
-            <span>Aplicar membresía</span>
-          </label>
-
-          {/* Desglose del descuento */}
-          {applyMembership && membershipDiscount && (
-            <div className={styles.membershipBreakdown}>
-              {membershipDiscount.creditsUsed > 0 && (
-                <div className={styles.breakdownRow}>
-                  <span>
-                    Créditos usados ({membershipDiscount.creditsUsed})
-                  </span>
-                  <span className={styles.discount}>
-                    -$
-                    {(
-                      membershipDiscount.discountAmt +
-                      (membershipDiscount.creditsUsed > 0
-                        ? cart
-                            .slice(0, membershipDiscount.creditsUsed)
-                            .reduce((s, i) => s + i.price * i.quantity, 0)
-                        : 0)
-                    ).toFixed(2)}
-                  </span>
-                </div>
-              )}
-              {membershipDiscount.discountPct > 0 && (
-                <div className={styles.breakdownRow}>
-                  <span>Descuento {membershipDiscount.discountPct}%</span>
-                  <span className={styles.discount}>
-                    -${membershipDiscount.discountAmt.toFixed(2)}
-                  </span>
-                </div>
-              )}
-              <div
-                className={`${styles.breakdownRow} ${styles.breakdownTotal}`}
-              >
-                <span>Total con membresía</span>
-                <span>${membershipDiscount.finalTotal.toFixed(2)}</span>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* ══ IZQUIERDA ════════════════════════════════════════════════ */}
+        {/* ══ COLUMNA 1: Carrito ══════════════════════════════════════════ */}
         <div className={styles.leftPanel}>
           {/* Header */}
           <div className={styles.header}>
@@ -390,7 +341,6 @@ export function PosModal({
                 <thead>
                   <tr>
                     <th>{t("product")}</th>
-                    {/* Columna ejecutor solo visible en modo servicio */}
                     {mode === "service" && (
                       <th style={{ minWidth: 160 }}>{t("employee")}</th>
                     )}
@@ -406,26 +356,22 @@ export function PosModal({
                       item.product?.id ?? item.service?.id ?? index;
                     const itemName =
                       item.product?.name ?? item.service?.name ?? "—";
-
-                    // Empleado actualmente asignado a este item
                     const currentEmployee = item.employeeId
-                      ? ({
+                      ? (employees.find((e: any) => e.id === item.employeeId) ??
+                        ({
                           id: item.employeeId,
-                          name: "Cargando...",
-                        } as Employee)
+                          name: `Empleado #${item.employeeId}`,
+                        } as Employee))
                       : null;
 
                     return (
                       <tr key={`${itemId}-${index}`}>
-                        {/* Nombre del item */}
                         <td>
                           <div className={styles.itemName}>{itemName}</div>
                           <div className={styles.itemSub}>
                             {mode === "product" ? "Producto" : "Servicio"}
                           </div>
                         </td>
-
-                        {/* Selector de ejecutor por item — solo en servicios */}
                         {mode === "service" && (
                           <td style={{ verticalAlign: "middle" }}>
                             <EmployeeSelector
@@ -436,8 +382,6 @@ export function PosModal({
                             />
                           </td>
                         )}
-
-                        {/* Controles de cantidad */}
                         <td style={{ textAlign: "center" }}>
                           <div className={styles.qtyControls}>
                             <button
@@ -461,18 +405,12 @@ export function PosModal({
                             </button>
                           </div>
                         </td>
-
-                        {/* Precio unitario */}
                         <td className={styles.priceCell}>
                           ${item.price.toFixed(2)}
                         </td>
-
-                        {/* Subtotal del item */}
                         <td className={styles.totalCell}>
                           ${(item.price * item.quantity).toFixed(2)}
                         </td>
-
-                        {/* Eliminar */}
                         <td>
                           <button
                             className={styles.removeBtn}
@@ -507,9 +445,8 @@ export function PosModal({
           </div>
         </div>
 
-        {/* ══ DERECHA: shortcuts + checkout ════════════════════════════ */}
+        {/* ══ COLUMNA 2: Shortcuts ════════════════════════════════════════ */}
         <div className={styles.rightPanel}>
-          {/* Grid de shortcuts */}
           <div className={styles.shortcutsGrid}>
             {itemsLoading && items.length === 0
               ? Array.from({ length: 12 }).map((_, i) => (
@@ -552,7 +489,6 @@ export function PosModal({
                 })}
           </div>
 
-          {/* Paginación */}
           {itemLastPage > 1 && (
             <div className={styles.paginationContainer}>
               <Paginator
@@ -565,70 +501,137 @@ export function PosModal({
               />
             </div>
           )}
+        </div>
 
-          {/* Checkout */}
-          <div className={styles.checkoutSection}>
-            {/* Cliente */}
-            <div className={styles.checkoutField}>
-              <label className={styles.checkoutLabel}>
-                {t("client")}
-                {!selectedClient && <span className={styles.required}>*</span>}
-              </label>
-              <ClientSelector
-                selectedClient={selectedClient}
-                onSelect={setSelectedClient}
-                onClear={() => setSelectedClient(null)}
-              />
-            </div>
-
-            {/* Aviso si faltan ejecutores */}
-            {mode === "service" && cart.length > 0 && !allItemsHaveEmployee && (
-              <p
-                style={{
-                  fontSize: "var(--font-size-xs)",
-                  color: "var(--color-warning)",
-                  margin: 0,
-                }}
-              >
-                ⚠️ Asigna un ejecutor a cada servicio
-              </p>
-            )}
-
-            {/* Método de pago */}
-            <div className={styles.checkoutField}>
-              <label className={styles.checkoutLabel}>
-                {t("paymentMethod")}
-              </label>
-              <div className={styles.paymentMethods}>
-                {PAYMENT_METHODS.map((pm) => (
-                  <button
-                    key={pm.key}
-                    className={`${styles.methodBtn} ${
-                      paymentMethod === pm.key ? styles.methodActive : ""
-                    }`}
-                    onClick={() => setPaymentMethod(pm.key)}
-                  >
-                    {pm.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Botón cobrar */}
-            <button
-              className={styles.checkoutBtn}
-              onClick={handleCheckout}
-              disabled={!canCheckout}
-            >
-              {!canCheckout && cart.length > 0
-                ? !selectedClient
-                  ? t("selectClientFirst")
-                  : !allItemsHaveEmployee
-                    ? "Asigna ejecutores"
-                    : t("checkout")
-                : `${t("checkout")} $${finalTotal.toFixed(2)}`}
-            </button>
+        {/* ══ COLUMNA 3: Checkout ═════════════════════════════════════════ */}
+        <div className={styles.checkoutSection}>
+          {/* Cliente */}
+          <div className={styles.checkoutField}>
+            <label className={styles.checkoutLabel}>
+              {t("client")}
+              {!selectedClient && <span className={styles.required}>*</span>}
+            </label>
+            <ClientSelector
+              selectedClient={selectedClient}
+              onSelect={setSelectedClient}
+              onClear={() => setSelectedClient(null)}
+            />
           </div>
+
+          {/* Membresía */}
+          {loadingMembership && (
+            <p
+              style={{
+                fontSize: "var(--font-size-xs)",
+                color: "var(--color-text-muted)",
+              }}
+            >
+              Verificando membresía...
+            </p>
+          )}
+          {membership && !loadingMembership && (
+            <div className={styles.membershipBox}>
+              <div className={styles.membershipHeader}>
+                <span className={styles.membershipIcon}>👑</span>
+                <div>
+                  <p className={styles.membershipName}>
+                    {membership.plan?.name}
+                  </p>
+                  <p className={styles.membershipSub}>
+                    {membership.credits_available} créditos disponibles
+                    {membership.plan?.discount_percent &&
+                      ` · ${membership.plan.discount_percent}% descuento`}
+                  </p>
+                </div>
+              </div>
+              <label className={styles.membershipToggle}>
+                <input
+                  type="checkbox"
+                  checked={applyMembership}
+                  onChange={(e) => setApplyMembership(e.target.checked)}
+                />
+                <span>Aplicar membresía</span>
+              </label>
+              {applyMembership && membershipDiscount && (
+                <div className={styles.membershipBreakdown}>
+                  {membershipDiscount.creditsUsed > 0 && (
+                    <div className={styles.breakdownRow}>
+                      <span>
+                        Créditos usados ({membershipDiscount.creditsUsed})
+                      </span>
+                      <span className={styles.discount}>
+                        -$
+                        {cart
+                          .slice(0, membershipDiscount.creditsUsed)
+                          .reduce((s, i) => s + i.price * i.quantity, 0)
+                          .toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                  {membershipDiscount.discountPct > 0 && (
+                    <div className={styles.breakdownRow}>
+                      <span>Descuento {membershipDiscount.discountPct}%</span>
+                      <span className={styles.discount}>
+                        -${membershipDiscount.discountAmt.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    className={`${styles.breakdownRow} ${styles.breakdownTotal}`}
+                  >
+                    <span>Total con membresía</span>
+                    <span>${membershipDiscount.finalTotal.toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Aviso ejecutores */}
+          {mode === "service" && cart.length > 0 && !allItemsHaveEmployee && (
+            <p
+              style={{
+                fontSize: "var(--font-size-xs)",
+                color: "var(--color-warning)",
+                margin: 0,
+              }}
+            >
+              ⚠️ Asigna un ejecutor a cada servicio
+            </p>
+          )}
+
+          {/* Método de pago */}
+          <div className={styles.checkoutField}>
+            <label className={styles.checkoutLabel}>{t("paymentMethod")}</label>
+            <div className={styles.paymentMethods}>
+              {PAYMENT_METHODS.map((pm) => (
+                <button
+                  key={pm.key}
+                  className={`${styles.methodBtn} ${
+                    paymentMethod === pm.key ? styles.methodActive : ""
+                  }`}
+                  onClick={() => setPaymentMethod(pm.key)}
+                >
+                  {pm.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Botón cobrar */}
+          <button
+            className={styles.checkoutBtn}
+            onClick={handleCheckout}
+            disabled={!canCheckout}
+          >
+            {!canCheckout && cart.length > 0
+              ? !selectedClient
+                ? t("selectClientFirst")
+                : !allItemsHaveEmployee
+                  ? "Asigna ejecutores"
+                  : t("checkout")
+              : `${t("checkout")} $${finalTotal.toFixed(2)}`}
+          </button>
         </div>
       </div>
     </div>

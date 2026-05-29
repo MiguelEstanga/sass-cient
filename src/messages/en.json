@@ -1,4 +1,23 @@
 {
+  "login": {
+    "brand": "LuxuryBeauty",
+    "taglineTitle1": "Manage your salon",
+    "taglineTitle2": "the smart way",
+    "taglineDesc": "Appointments, employees, sales and memberships in one platform.",
+    "features": {
+      "calendar": "Drag & drop calendar",
+      "pos": "Integrated point of sale",
+      "memberships": "Membership system",
+      "dashboard": "Real-time dashboard"
+    },
+    "backLink": "Back to home",
+  
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign in",
+    "loginError": "Invalid credentials",
+    "welcomeBack": "Welcome back"
+  },
   "common": {
     "loading": "Loading...",
     "save": "Save",
@@ -211,5 +230,65 @@
     "errorMove": "Error moving",
     "errorCancel": "Error cancelling",
     "back": "Back"
+  },
+  "landing": {
+    "nav": {
+      "login": "Sign in"
+    },
+    "badge": "Beauty salon management system",
+    "hero": {
+      "title1": "Your salon,",
+      "title2": "perfectly",
+      "title3": "organized",
+      "subtitle": "Manage appointments, employees, sales and clients from one place. Built for salons that want to grow.",
+      "cta": "Enter system",
+      "ctaSecondary": "See features"
+    },
+    "stats": {
+      "digital": "Digital",
+      "available": "Available",
+      "platform": "Platform"
+    },
+    "features": {
+      "eyebrow": "All in one",
+      "title": "Everything your salon needs",
+      "appointments": {
+        "title": "Appointment management",
+        "desc": "Weekly calendar with drag & drop. Assign employees, avoid scheduling conflicts and track every minute."
+      },
+      "pos": {
+        "title": "Point of sale",
+        "desc": "Record product and service sales with multiple payment methods. Generate receipts instantly."
+      },
+      "clients": {
+        "title": "Client management",
+        "desc": "Complete history for every client. Preferences, past appointments and payments in one profile."
+      },
+      "employees": {
+        "title": "Employee control",
+        "desc": "Schedules, roles and work sessions. See in real time who is attending and how long they've been working."
+      },
+      "sessions": {
+        "title": "Live sessions",
+        "desc": "Persistent timer per service. The clock keeps running even if you reload the page."
+      },
+      "dashboard": {
+        "title": "Metrics dashboard",
+        "desc": "Real-time KPIs: daily revenue, active appointments, new clients and sessions in progress."
+      },
+      "memberships": {
+        "title": "Memberships",
+        "desc": "Monthly plans with credits and discounts. Automatic billing and monthly credit renewal."
+      }
+    },
+    "cta": {
+      "eyebrow": "Ready to start?",
+      "title": "Take your salon to the next level",
+      "subtitle": "Access your control panel and start managing your business professionally.",
+      "button": "Access now"
+    },
+    "footer": {
+      "rights": "All rights reserved"
+    }
   }
 }

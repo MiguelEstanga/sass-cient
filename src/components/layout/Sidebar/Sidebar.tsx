@@ -46,46 +46,31 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "Principal",
     items: [
-      {
-        label: "Dashboard",
-        href: "/dashboard",
-        icon: <LayoutDashboard size={18} />,
-      },
+      { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={18} /> },
     ],
   },
   {
     label: "Gestión",
     items: [
-      { label: "Clientes", href: "/clients", icon: <UserCircle size={18} /> },
-      { label: "Usuarios", href: "/users", icon: <Users size={18} /> },
-      { label: "Horarios", href: "/schedules", icon: <Clock size={18} /> },
+      { label: "Clientes",   href: "/clients",      icon: <UserCircle size={18} /> },
+      { label: "Usuarios",   href: "/users",         icon: <Users      size={18} /> },
+      { label: "Horarios",   href: "/schedules",     icon: <Clock      size={18} /> },
+      { label: "Membresías", href: "/memberships",   icon: <Crown      size={18} /> }, // ← aquí
     ],
   },
   {
     label: "Operaciones",
     items: [
-      { label: "Citas", href: "/appointments", icon: <Calendar size={18} /> },
-      {
-        label: "Sesiones",
-        href: "/sessions",
-        icon: <ClipboardList size={18} />,
-      },
-      {
-        label: "Punto de Venta",
-        href: "/pos",
-        icon: <ShoppingCart size={18} />,
-      },
+      { label: "Citas",          href: "/appointments", icon: <Calendar     size={18} /> },
+      { label: "Sesiones",       href: "/sessions",     icon: <ClipboardList size={18} /> },
+      { label: "Punto de Venta", href: "/pos",          icon: <ShoppingCart size={18} /> },
     ],
   },
   {
     label: "Catálogo",
     items: [
-      {
-        label: "Productos",
-        href: "/products",
-        icon: <ShoppingBag size={18} />,
-      },
-      { label: "Servicios", href: "/services", icon: <Wrench size={18} /> },
+      { label: "Productos", href: "/products", icon: <ShoppingBag size={18} /> },
+      { label: "Servicios", href: "/services", icon: <Wrench      size={18} /> },
     ],
   },
   {
@@ -93,31 +78,13 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       {
         label: "Finanzas",
-        icon: <Wallet size={18} />,
+        icon:  <Wallet size={18} />,
         children: [
-          {
-            label: "Préstamos",
-            href: "/finance/loans",
-            icon: <Landmark size={16} />,
-          },
-          {
-            label: "Categorías",
-            href: "/finance/categories",
-            icon: <Tags size={16} />,
-          },
-          {
-            label: "Transacciones",
-            href: "/finance/transactions",
-            icon: <ArrowLeftRight size={16} />,
-          },
+          { label: "Préstamos",     href: "/finance/loans",        icon: <Landmark       size={16} /> },
+          { label: "Categorías",    href: "/finance/categories",   icon: <Tags           size={16} /> },
+          { label: "Transacciones", href: "/finance/transactions", icon: <ArrowLeftRight size={16} /> },
         ],
       },
-    ],
-  },
-  {
-    label: "Gestión",
-    items: [
-      { label: "Membresías", href: "/memberships", icon: <Crown size={18} /> },
     ],
   },
 ];

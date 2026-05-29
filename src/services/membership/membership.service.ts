@@ -2,6 +2,7 @@ import { api } from "@/lib/api/client";
 import type {
   MembershipPlan,
   MembershipSubscription,
+  MembershipInvoice,
   CreditLog,
   CreatePlanDto,
   CreateSubscriptionDto,
@@ -9,48 +10,47 @@ import type {
 } from "@/types/membership.types";
 import type { PaginatedResponse } from "@/types/api.types";
 
-const PLANS = "memberships/plans";
-const SUBS = "memberships/subscriptions";
+const PLANS    = "memberships/plans";
+const SUBS     = "memberships/subscriptions";
+const INVOICES = "memberships/invoices";
 
 export const membershipService = {
   // ── Planes ────────────────────────────────────────────────────────────
-  getPlans: (params?: {
-    search?: string;
-    per_page?: number;
-    page?: number;
-  }) => {
+  getPlans: (params?: { search?: string; per_page?: number; page?: number }) => {
     const p = new URLSearchParams();
-    if (params?.search) p.set("search", params.search);
+    if (params?.search)   p.set("search",   params.search);
     if (params?.per_page) p.set("per_page", String(params.per_page));
-    if (params?.page) p.set("page", String(params.page));
+    if (params?.page)     p.set("page",     String(params.page));
     const q = p.toString();
     return api.get<PaginatedResponse<MembershipPlan>>(
-      `${PLANS}${q ? `?${q}` : ""}`,
+      `${PLANS}${q ? `?${q}` : ""}`
     );
   },
 
-  createPlan: (data: CreatePlanDto) => api.post<MembershipPlan>(PLANS, data),
+  createPlan: (data: CreatePlanDto) =>
+    api.post<MembershipPlan>(PLANS, data),
 
   updatePlan: (id: number, data: Partial<CreatePlanDto>) =>
     api.put<MembershipPlan>(`${PLANS}/${id}`, data),
 
-  deletePlan: (id: number) => api.delete(`${PLANS}/${id}`),
+  deletePlan: (id: number) =>
+    api.delete(`${PLANS}/${id}`),
 
   // ── Suscripciones ─────────────────────────────────────────────────────
   getSubscriptions: (params?: {
-    search?: string;
-    status?: string;
+    search?:   string;
+    status?:   string;
     per_page?: number;
-    page?: number;
+    page?:     number;
   }) => {
     const p = new URLSearchParams();
-    if (params?.search) p.set("search", params.search);
-    if (params?.status) p.set("status", params.status);
+    if (params?.search)   p.set("search",   params.search);
+    if (params?.status)   p.set("status",   params.status);
     if (params?.per_page) p.set("per_page", String(params.per_page));
-    if (params?.page) p.set("page", String(params.page));
+    if (params?.page)     p.set("page",     String(params.page));
     const q = p.toString();
     return api.get<PaginatedResponse<MembershipSubscription>>(
-      `${SUBS}${q ? `?${q}` : ""}`,
+      `${SUBS}${q ? `?${q}` : ""}`
     );
   },
 
@@ -67,5 +67,30 @@ export const membershipService = {
     api.get<CreditLog[]>(`${SUBS}/${id}/credits`),
 
   getClientMembership: (clientId: number) =>
-    api.get<MembershipSubscription | null>(`memberships/client/${clientId}`),
+    api.get<MembershipSubscription | null>(
+      `memberships/subscriptions/client/${clientId}`
+    ),
+
+  // ── Facturas ──────────────────────────────────────────────────────────
+  getInvoices: (params?: {
+    search?:   string;
+    status?:   string;
+    per_page?: number;
+    page?:     number;
+  }) => {
+    const p = new URLSearchParams();
+    if (params?.search)   p.set("search",   params.search);
+    if (params?.status)   p.set("status",   params.status);
+    if (params?.per_page) p.set("per_page", String(params.per_page));
+    if (params?.page)     p.set("page",     String(params.page));
+    const q = p.toString();
+    return api.get<PaginatedResponse<MembershipInvoice>>(
+      `${INVOICES}${q ? `?${q}` : ""}`
+    );
+  },
+
+  payInvoice: (id: number, paymentMethod: string) =>
+    api.post<MembershipInvoice>(`${INVOICES}/${id}/pay`, {
+      payment_method: paymentMethod,
+    }),
 };

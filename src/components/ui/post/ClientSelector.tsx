@@ -6,7 +6,7 @@ import { useLocalCache } from "@/hooks/useLocalCache";
 import { useToast } from "@/hooks/useToast";
 import { Input } from "@/components/ui/Input";
 import { Drawer } from "@/components/ui/Modal";
- import { ApiError } from "@/lib/api/errors";
+import { ApiError } from "@/lib/api/errors";
 import type { Client } from "@/types/client.types";
 import type { ClientFormValues } from "@/lib/validations/client.schema";
 import styles from "./ClientSelector.module.css";
@@ -30,10 +30,11 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
     search,
     setSearch,
     refresh, // <-- La magia para refrescar sin recargar página
-  } = useLocalCache<Client>(
-    (params) => clientService.getAll(params),
-    { keyField: "id", blockSize: 1500, pageSize: 10 }
-  );
+  } = useLocalCache<Client>((params) => clientService.getAll(params), {
+    keyField: "id",
+    blockSize: 1500,
+    pageSize: 10,
+  });
 
   // Se ejecuta al crear un cliente nuevo desde aquí
   async function handleCreateClient(values: ClientFormValues) {
@@ -41,7 +42,7 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
     try {
       const newClient = await clientService.create(values);
       toast.success(`${values.name} creado correctamente`);
-      
+
       setDrawerOpen(false);
       refresh(); // <-- Forzamos al hook a traerse al nuevo cliente de la BD
       onSelect(newClient); // <-- Seleccionamos automáticamente el cliente nuevo
@@ -50,7 +51,9 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
       if (err instanceof ApiError && err.isValidationError()) {
         toast.error(err.getAllErrors().join(", "));
       } else {
-        toast.error(err instanceof ApiError ? err.message : "Error al crear cliente");
+        toast.error(
+          err instanceof ApiError ? err.message : "Error al crear cliente",
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -61,16 +64,37 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
     <div className={styles.container}>
       {selectedClient ? (
         <div className={styles.selectedBox}>
-          <div>
+          <div className={styles.selectedAvatar}>
+            {selectedClient.name.charAt(0).toUpperCase()}
+          </div>
+          <div className={styles.selectedData}>
             <span className={styles.selectedName}>{selectedClient.name}</span>
-            <div className={styles.selectedInfo}>
-              {selectedClient.phone || selectedClient.email || "Sin contacto"}
+            <div className={styles.selectedMeta}>
+              {selectedClient.phone && (
+                <span className={styles.metaItem}>
+                   {selectedClient.number_prefix ?? ""} {selectedClient.phone}
+                </span>
+              )}
+              {selectedClient.document_number && (
+                <span className={styles.metaItem}> 
+                    {selectedClient.type_document ?? ""}{" "}
+                  {selectedClient.document_number}
+                </span>
+              )}
+              {!selectedClient.phone && !selectedClient.document_number && (
+                <span className={styles.metaItem}>Sin contacto</span>
+              )}
             </div>
           </div>
-          <button className={styles.clearBtn} onClick={onClear}>✕ Quitar</button>
+          <button className={styles.clearBtn} onClick={onClear}>
+            ✕ Quitar
+          </button>
         </div>
       ) : (
-        <div className={styles.triggerBox} onClick={() => setShowDropdown(true)}>
+        <div
+          className={styles.triggerBox}
+          onClick={() => setShowDropdown(true)}
+        >
           <span>+ Seleccionar Cliente</span>
         </div>
       )}
@@ -87,7 +111,7 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
               autoFocus
             />
           </div>
-          
+
           <div className={styles.dropdownList}>
             {clients.map((client) => (
               <div
@@ -106,13 +130,18 @@ export function ClientSelector({ selectedClient, onSelect, onClear }: Props) {
               </div>
             ))}
             {clients.length === 0 && (
-              <div className={styles.emptyDropdown}>No se encontraron clientes</div>
+              <div className={styles.emptyDropdown}>
+                No se encontraron clientes
+              </div>
             )}
           </div>
 
-          <button 
-            className={styles.newClientBtn} 
-            onClick={() => { setShowDropdown(false); setDrawerOpen(true); }}
+          <button
+            className={styles.newClientBtn}
+            onClick={() => {
+              setShowDropdown(false);
+              setDrawerOpen(true);
+            }}
           >
             + Crear nuevo cliente
           </button>

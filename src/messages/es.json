@@ -1,4 +1,22 @@
 {
+  "login": {
+    "brand": "LuxuryBeauty",
+    "taglineTitle1": "Gestiona tu salón",
+    "taglineTitle2": "de forma inteligente",
+    "taglineDesc": "Citas, empleados, ventas y membresías en una sola plataforma.",
+    "features": {
+      "calendar": "Calendario con drag & drop",
+      "pos": "Punto de venta integrado",
+      "memberships": "Sistema de membresías",
+      "dashboard": "Dashboard en tiempo real"
+    },
+    "backLink": "Volver al inicio",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "loginButton": "Ingresar",
+    "loginError": "Credenciales inválidas",
+    "welcomeBack": "Bienvenido de vuelta"
+  },
   "common": {
     "loading": "Cargando...",
     "save": "Guardar",
@@ -211,5 +229,65 @@
     "errorMove": "Error al mover",
     "errorCancel": "Error al cancelar",
     "back": "Volver"
+  },
+  "landing": {
+    "nav": {
+      "login": "Iniciar sesión"
+    },
+    "badge": "Sistema de gestión para salones de belleza",
+    "hero": {
+      "title1": "Tu salón,",
+      "title2": "perfectamente",
+      "title3": "organizado",
+      "subtitle": "Gestiona citas, empleados, ventas y clientes desde un solo lugar. Diseñado para salones que quieren crecer.",
+      "cta": "Entrar al sistema",
+      "ctaSecondary": "Ver funciones"
+    },
+    "stats": {
+      "digital": "Digital",
+      "available": "Disponible",
+      "platform": "Plataforma"
+    },
+    "features": {
+      "eyebrow": "Todo en uno",
+      "title": "Todo lo que necesitas para tu salón",
+      "appointments": {
+        "title": "Gestión de citas",
+        "desc": "Calendario semanal con drag & drop. Asigna empleados, evita choques de horario y lleva el control al minuto."
+      },
+      "pos": {
+        "title": "Punto de venta",
+        "desc": "Registra ventas de productos y servicios con múltiples métodos de pago. Genera comprobantes al instante."
+      },
+      "clients": {
+        "title": "Gestión de clientes",
+        "desc": "Historial completo de cada cliente. Preferencias, citas anteriores y pagos en un solo perfil."
+      },
+      "employees": {
+        "title": "Control de empleados",
+        "desc": "Horarios, roles y sesiones de trabajo. Mira en tiempo real quién está atendiendo y cuánto tiempo lleva."
+      },
+      "sessions": {
+        "title": "Sesiones en vivo",
+        "desc": "Cronómetro persistente por servicio. El tiempo sigue contando aunque recargues la página."
+      },
+      "dashboard": {
+        "title": "Dashboard de métricas",
+        "desc": "KPIs en tiempo real: ingresos del día, citas activas, clientes nuevos y sesiones en progreso."
+      },
+      "memberships": {
+        "title": "Membresías",
+        "desc": "Planes mensuales con créditos y descuentos. Cobro automático y renovación de créditos cada mes."
+      }
+    },
+    "cta": {
+      "eyebrow": "¿Listo para empezar?",
+      "title": "Lleva tu salón al siguiente nivel",
+      "subtitle": "Accede a tu panel de control y comienza a gestionar tu negocio de forma profesional.",
+      "button": "Acceder ahora"
+    },
+    "footer": {
+      "rights": "Todos los derechos reservados"
+    }
   }
 }
