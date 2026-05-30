@@ -30,7 +30,7 @@ export function CompletedTasksTable({ onRefreshReady }: Props) {
   const t = useTranslations("sessions");
 
   const fetcher = useCallback(
-    (params: Record<string, unknown>) =>
+    (params: Record<string, any>) =>
       taskService.getCompleted(params as {
         search?:   string;
         per_page?: number;
