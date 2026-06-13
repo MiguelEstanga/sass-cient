@@ -28,8 +28,9 @@ import {
   LogOut,
   Crown,
 } from "lucide-react";
+ 
+import { useRole } from "@/hooks/useRole";
 import styles from "./Sidebar.module.css";
-
 interface NavItem {
   label: string;
   href?: string;
@@ -46,31 +47,57 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "Principal",
     items: [
-      { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={18} /> },
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+        icon: <LayoutDashboard size={18} />,
+      },
+    ],
+  },
+  {
+    label: "Configuración",
+    items: [
+      {
+        label: "Configuración",
+        href: "/settings",
+        icon: <Settings size={18} />,
+      },
     ],
   },
   {
     label: "Gestión",
     items: [
-      { label: "Clientes",   href: "/clients",      icon: <UserCircle size={18} /> },
-      { label: "Usuarios",   href: "/users",         icon: <Users      size={18} /> },
-      { label: "Horarios",   href: "/schedules",     icon: <Clock      size={18} /> },
-      { label: "Membresías", href: "/memberships",   icon: <Crown      size={18} /> }, // ← aquí
+      { label: "Clientes", href: "/clients", icon: <UserCircle size={18} /> },
+      { label: "Usuarios", href: "/users", icon: <Users size={18} /> },
+      { label: "Horarios", href: "/schedules", icon: <Clock size={18} /> },
+      { label: "Membresías", href: "/memberships", icon: <Crown size={18} /> }, // ← aquí
     ],
   },
   {
     label: "Operaciones",
     items: [
-      { label: "Citas",          href: "/appointments", icon: <Calendar     size={18} /> },
-      { label: "Sesiones",       href: "/sessions",     icon: <ClipboardList size={18} /> },
-      { label: "Punto de Venta", href: "/pos",          icon: <ShoppingCart size={18} /> },
+      { label: "Citas", href: "/appointments", icon: <Calendar size={18} /> },
+      {
+        label: "Sesiones",
+        href: "/sessions",
+        icon: <ClipboardList size={18} />,
+      },
+      {
+        label: "Punto de Venta",
+        href: "/pos",
+        icon: <ShoppingCart size={18} />,
+      },
     ],
   },
   {
     label: "Catálogo",
     items: [
-      { label: "Productos", href: "/products", icon: <ShoppingBag size={18} /> },
-      { label: "Servicios", href: "/services", icon: <Wrench      size={18} /> },
+      {
+        label: "Productos",
+        href: "/products",
+        icon: <ShoppingBag size={18} />,
+      },
+      { label: "Servicios", href: "/services", icon: <Wrench size={18} /> },
     ],
   },
   {
@@ -78,11 +105,23 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       {
         label: "Finanzas",
-        icon:  <Wallet size={18} />,
+        icon: <Wallet size={18} />,
         children: [
-          { label: "Préstamos",     href: "/finance/loans",        icon: <Landmark       size={16} /> },
-          { label: "Categorías",    href: "/finance/categories",   icon: <Tags           size={16} /> },
-          { label: "Transacciones", href: "/finance/transactions", icon: <ArrowLeftRight size={16} /> },
+          {
+            label: "Préstamos",
+            href: "/finance/loans",
+            icon: <Landmark size={16} />,
+          },
+          {
+            label: "Categorías",
+            href: "/finance/categories",
+            icon: <Tags size={16} />,
+          },
+          {
+            label: "Transacciones",
+            href: "/finance/transactions",
+            icon: <ArrowLeftRight size={16} />,
+          },
         ],
       },
     ],
@@ -94,7 +133,7 @@ export function Sidebar() {
   const { sidebarCollapsed, toggleSidebar } = useUiStore();
   const { user, role, logout } = useAuthStore();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
-
+  const { finance, users, settings, dashboard } = useRole();
   function toggleMenu(label: string) {
     setOpenMenus((prev) =>
       prev.includes(label) ? prev.filter((i) => i !== label) : [...prev, label],
@@ -126,6 +165,17 @@ export function Sidebar() {
   const profilePct = Math.round((profileComplete / profileFields.length) * 100);
   const profileIncomplete = profilePct < 100;
 
+  const filteredSections = NAV_SECTIONS.map((section) => ({
+    ...section,
+    items: section.items.filter((item) => {
+      if (item.href === "/dashboard" && !dashboard.canView) return false;
+      if (item.href === "/users" && !users.canView) return false;
+      if (item.href === "/memberships" && !settings.canManageRoles)
+        return false;
+      if (item.href === "/finance" && !finance.canView) return false;
+      return true;
+    }),
+  })).filter((section) => section.items.length > 0);
   return (
     <aside className={cn(styles.sidebar, sidebarCollapsed && styles.collapsed)}>
       {/* ── Logo ──────────────────────────────────────────────────────── */}
@@ -140,7 +190,7 @@ export function Sidebar() {
 
       {/* ── Nav ───────────────────────────────────────────────────────── */}
       <nav className={styles.nav}>
-        {NAV_SECTIONS.map((section) => (
+        {filteredSections.map((section) => (
           <div key={section.label} className={styles.section}>
             {/* Label de sección — solo cuando no está colapsado */}
             {!sidebarCollapsed && (

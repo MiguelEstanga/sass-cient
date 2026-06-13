@@ -13,6 +13,7 @@ export const updatePersonSchema = z.object({
   number_prefix:   z.string().optional(),
   is_active:       z.boolean().optional(),
   notes:           z.string().max(500).optional().or(z.literal("")),
+   
 });
 
 export type UpdatePersonFormValues = z.infer<typeof updatePersonSchema>;

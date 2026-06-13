@@ -289,5 +289,41 @@
     "footer": {
       "rights": "Todos los derechos reservados"
     }
+  },
+  "import": {
+    "title": "Importar {entity}",
+    "subtitle": "Sube un archivo CSV o Excel para importar registros en masa",
+    "download": "Descargar plantilla",
+    "drag": "Arrastra tu archivo aquí",
+    "or": "o",
+    "browse": "selecciónalo manualmente",
+    "formats": "Formatos aceptados: .csv, .xlsx, .xls · Máx. 5MB",
+    "invalidFormat": "Formato de archivo no válido. Usa .csv, .xlsx o .xls",
+    "button": "Importar",
+    "close": "Cerrar",
+    "retry": "Importar otro archivo",
+    "processing": "Procesando importación...",
+    "total": "Total",
+    "imported": "Importados",
+    "failed": "Fallidos",
+    "success": "{count, plural, =1 {# registro importado correctamente} other {# registros importados correctamente}}",
+    "errors": "{count, plural, =1 {# error encontrado} other {# errores encontrados}}",
+    "row": "Fila"
+  },
+  "export": {
+    "button": "Exportar",
+    "exporting": "Exportando...",
+    "excel": "Excel",
+    "csv": "CSV",
+    "all": "Todo",
+    "today": "Hoy",
+    "last100": "Últimos 100",
+    "dateRange": "Rango de fechas",
+    "from": "Desde",
+    "to": "Hasta",
+    "export": "Exportar",
+    "cancel": "Cancelar",
+    "success": "Archivo descargado correctamente",
+    "error": "Error al exportar"
   }
 }

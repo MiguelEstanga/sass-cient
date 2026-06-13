@@ -14,6 +14,7 @@ interface PersonBase {
   address:         string | null;
   city:            string | null;
   zip:             string | null;
+  roles:            Role[];
   created_at:      string;
   updated_at:      string;
 }

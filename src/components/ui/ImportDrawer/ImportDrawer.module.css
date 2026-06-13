@@ -1,0 +1,110 @@
+/* ── Processing ──────────────────────────────────────────────────────────── */
+.processing {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--spacing-md);
+  padding:        var(--spacing-md) 0;
+}
+
+.processingHeader {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-sm);
+}
+
+.processingTitle {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color:       var(--color-text);
+  margin:      0;
+}
+
+.spinner {
+  animation:  spin 1s linear infinite;
+  color:      var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* Barra de progreso */
+.progressBar {
+  height:        8px;
+  background:    var(--color-border);
+  border-radius: var(--radius-full);
+  overflow:      hidden;
+}
+
+.progressFill {
+  height:        100%;
+  background:    linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: var(--radius-full);
+  transition:    width 0.4s ease;
+}
+
+.progressPct {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-primary);
+  text-align:  right;
+  margin:      0;
+}
+
+/* Stats en vivo */
+.liveStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:     var(--spacing-sm);
+}
+
+.liveStat {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            2px;
+  padding:        var(--spacing-sm);
+  background:     var(--color-bg-secondary);
+  border:         1px solid var(--color-border);
+  border-radius:  var(--radius-md);
+}
+
+.liveStatSuccess { border-color: var(--color-success); }
+.liveStatFailed  { border-color: var(--color-error);   }
+
+.liveStatLabel {
+  font-size: var(--font-size-xs);
+  color:     var(--color-text-muted);
+}
+
+.liveStatValue {
+  font-size:   var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-text);
+}
+
+/* ── Result header ───────────────────────────────────────────────────────── */
+.resultHeader {
+  display:       flex;
+  align-items:   center;
+  gap:           var(--spacing-sm);
+  padding:       var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+
+.resultSuccess {
+  background: var(--color-success-bg);
+  color:      var(--color-success);
+}
+
+.resultFailed {
+  background: var(--color-error-bg);
+  color:      var(--color-error);
+}
+
+.resultTitle {
+  font-size:   var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin:      0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

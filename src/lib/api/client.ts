@@ -61,7 +61,7 @@ function buildHeaders(options: RequestOptions): HeadersInit {
   const finalHeaders: Record<string, string> = {
     Accept: "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    "company-id": String(process.env.NEXT_PUBLIC_COMPANY_ID)  ?? 1,
+    "company-id": getCompanyId(companyId)  ?? 1,
     "Accept-Language": getLocale(locale),
     ...headers,
   };

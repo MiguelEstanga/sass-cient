@@ -1,0 +1,126 @@
+.overlay {
+  position:        fixed;
+  inset:           0;
+  background:      rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index:         var(--z-modal);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         var(--spacing-md);
+}
+
+.dialog {
+  background:    var(--color-bg);
+  border:        1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding:       var(--spacing-xl);
+  width:         100%;
+  max-width:     380px;
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--spacing-md);
+  box-shadow:    var(--shadow-lg);
+}
+
+.header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+}
+
+.iconBox {
+  width:           44px;
+  height:          44px;
+  border-radius:   var(--radius-lg);
+  background:      var(--color-primary-light);
+  color:           var(--color-primary);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+}
+
+.closeBtn {
+  background:    none;
+  border:        none;
+  cursor:        pointer;
+  color:         var(--color-text-muted);
+  display:       flex;
+  align-items:   center;
+  padding:       4px;
+  border-radius: var(--radius-sm);
+  transition:    all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--color-bg-secondary);
+  color:      var(--color-text);
+}
+
+.body {
+  display:        flex;
+  flex-direction: column;
+  gap:            4px;
+}
+
+.title {
+  font-size:   var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color:       var(--color-text);
+  margin:      0;
+}
+
+.message {
+  font-size:   var(--font-size-sm);
+  color:       var(--color-text-secondary);
+  margin:      0;
+  line-height: 1.5;
+}
+
+/* ── PIN inputs ──────────────────────────────────────────────────────────── */
+.pinRow {
+  display:         flex;
+  gap:             var(--spacing-sm);
+  justify-content: center;
+  padding:         var(--spacing-sm) 0;
+}
+
+.pinInput {
+  width:         48px;
+  height:        56px;
+  border:        2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background:    var(--color-bg-secondary);
+  color:         var(--color-text);
+  font-size:     var(--font-size-xl);
+  font-weight:   var(--font-weight-bold);
+  text-align:    center;
+  outline:       none;
+  transition:    all var(--transition-fast);
+}
+
+.pinInput:focus {
+  border-color: var(--color-primary);
+  background:   var(--color-bg);
+  box-shadow:   0 0 0 3px var(--color-primary-light);
+}
+
+.pinInputError {
+  border-color: var(--color-error) !important;
+  box-shadow:   0 0 0 3px var(--color-error-bg) !important;
+}
+
+.error {
+  font-size:   var(--font-size-sm);
+  color:       var(--color-error);
+  text-align:  center;
+  margin:      0;
+}
+
+.actions {
+  display:         flex;
+  justify-content: flex-end;
+  gap:             var(--spacing-sm);
+  padding-top:     var(--spacing-sm);
+  border-top:      1px solid var(--color-border);
+}

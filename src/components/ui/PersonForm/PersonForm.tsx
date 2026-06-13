@@ -8,21 +8,30 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { TextArea } from "@/components/ui/TextArea";
 import { Button } from "@/components/ui/Button";
- 
+
 import type { Person } from "@/types/user.types";
 import styles from "./PersonForm.module.css";
-import { UpdatePersonFormValues, updatePersonSchema } from "@/lib/validations/person.schema";
- 
+import {
+  UpdatePersonFormValues,
+  updatePersonSchema,
+} from "@/lib/validations/person.schema";
+
 interface Props {
-  person:        Person;
-  onSubmit:      (values: UpdatePersonFormValues) => Promise<void>;
-  onCancel:      () => void;
+  person: Person;
+  onSubmit: (values: UpdatePersonFormValues) => Promise<void>;
+  onCancel: () => void;
   isSubmitting?: boolean;
 }
 
-export function PersonForm({ person, onSubmit, onCancel, isSubmitting }: Props) {
+export function PersonForm({
+  person,
+  onSubmit,
+  onCancel,
+  isSubmitting,
+}: Props) {
   const { prefixes, typeDocuments } = useAuthStore();
   const isClient = person._type === "client";
+  const personRole = person.roles?.[0]?.name ?? person.roles ?? "—";
 
   const {
     register,
@@ -35,24 +44,24 @@ export function PersonForm({ person, onSubmit, onCancel, isSubmitting }: Props) 
 
   useEffect(() => {
     reset({
-      name:            person.name            ?? "",
-      email:           person.email           ?? "",
-      phone:           person.phone           ?? "",
-      password:        "",
-      type_document:   person.type_document   ?? "",
+      name: person.name ?? "",
+      email: person.email ?? "",
+      phone: person.phone ?? "",
+      password: "",
+      type_document: person.type_document ?? "",
       document_number: person.document_number ?? "",
-      address:         person.address         ?? "",
-      city:            person.city            ?? "",
-      zip:             person.zip             ?? "",
-      number_prefix:   person.number_prefix   ?? "",
-      is_active:       person.is_active       ?? true,
-      notes:           isClient ? (person as any).notes ?? "" : undefined,
+      address: person.address ?? "",
+      city: person.city ?? "",
+      zip: person.zip ?? "",
+      number_prefix: person.number_prefix ?? "",
+      is_active: person.is_active ?? true,
+      notes: isClient ? ((person as any).notes ?? "") : undefined,
+      
     });
   }, [person, reset]);
 
   return (
     <div className={styles.form}>
-
       {/* Badge tipo de perfil */}
       <div className={styles.typeBadge}>
         <div className={styles.avatar}>
@@ -61,7 +70,7 @@ export function PersonForm({ person, onSubmit, onCancel, isSubmitting }: Props) 
         <div>
           <p className={styles.personName}>{person.name}</p>
           <p className={styles.personType}>
-            {isClient ? "👤 Cliente" : "✂️ Empleado"}
+           {personRole}
           </p>
         </div>
       </div>
@@ -86,7 +95,10 @@ export function PersonForm({ person, onSubmit, onCancel, isSubmitting }: Props) 
         <div className={styles.row}>
           <Select
             label="Prefijo"
-            options={prefixes.map((p) => ({ value: p.prefix, label: p.prefix }))}
+            options={prefixes.map((p) => ({
+              value: p.prefix,
+              label: p.prefix,
+            }))}
             placeholder="—"
             {...register("number_prefix")}
           />
@@ -105,7 +117,10 @@ export function PersonForm({ person, onSubmit, onCancel, isSubmitting }: Props) 
         <div className={styles.row}>
           <Select
             label="Tipo"
-            options={typeDocuments.map((d) => ({ value: d.name, label: d.name }))}
+            options={typeDocuments.map((d) => ({
+              value: d.name,
+              label: d.name,
+            }))}
             placeholder="—"
             fullWidth
             {...register("type_document")}

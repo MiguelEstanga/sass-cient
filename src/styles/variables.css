@@ -3,31 +3,35 @@
     var(--font-dm-sans), var(--font-geist-sans), -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), "Fira Code", monospace;
-  /* ===== COLORES ===== */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-primary-light: #dbeafe;
-  --color-primary-rgb: 59, 130, 246;
+  
+  /* ===== COLORES PRINCIPALES (SUPER OLED / PURPLE) ===== */
+  --color-primary: #6b21a8;        /* Morado Oscuro Base */
+  --color-primary-hover: #7c3aed;  /* Morado más brillante para hover */
+  --color-primary-light: #2e1065;  /* Fondo morado muy oscuro */
+  --color-primary-rgb: 107, 33, 168;
 
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
+  --color-bg: #000000;             /* Negro Puro OLED */
+  --color-bg-secondary: #0b0b0c;   /* Gris casi negro para tarjetas */
+  --color-bg-tertiary: #121214;    /* Tercer nivel de profundidad */
 
-  --color-text: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
+  /* ===== TEXTO (MÁXIMO CONTRASTE) ===== */
+  --color-text: #ffffff;           /* Blanco Puro */
+  --color-text-secondary: #e4e4e7; /* Blanco grisáceo muy claro */
+  --color-text-muted: #a1a1aa;     /* Gris claro para texto secundario */
 
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
+  /* ===== BORDES ===== */
+  --color-border: #27272a;         /* Bordes sutiles para no romper el negro */
+  --color-border-hover: #3f3f46;
 
+  /* ===== ESTADOS (ADAPTADOS PARA ALTO CONTRASTE) ===== */
   --color-error: #ef4444;
-  --color-error-bg: #fee2e2;
+  --color-error-bg: #450a0a;
   --color-success: #10b981;
-  --color-success-bg: #d1fae5;
+  --color-success-bg: #022c22;
   --color-warning: #f59e0b;
-  --color-warning-bg: #fef3c7;
+  --color-warning-bg: #451a03;
   --color-info: #3b82f6;
-  --color-info-bg: #dbeafe;
+  --color-info-bg: #172554;
 
   /* ===== SPACING ===== */
   --spacing-xs: 0.25rem;
@@ -61,10 +65,10 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* ===== SHADOWS ===== */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  /* ===== SHADOWS (SUAVES, YA QUE EN OLED SE NOTAN MENOS) ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.7);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.8);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.9);
 
   /* ===== TRANSITIONS ===== */
   --transition-fast: 150ms ease;
@@ -85,8 +89,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   TEMA OSCURO — se aplica automáticamente con prefers-color-scheme
-   O manualmente con <html data-theme="dark">
+   SOPORTE PARA TEMA OSCURO POR DEFECTO / DATA-THEME
 ══════════════════════════════════════════════════════════════════════════ */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -94,33 +97,30 @@
   }
 }
 
+/* Duplicamos las variables en [data-theme="dark"] para asegurar consistencia */
 [data-theme="dark"] {
-  --color-primary:        #6366f1;
-  --color-primary-hover:  #818cf8;
-  --color-primary-light:  rgba(99, 102, 241, 0.15);
-  --color-primary-rgb:    99, 102, 241;
+  --color-primary:        #6b21a8;
+  --color-primary-hover:  #7c3aed;
+  --color-primary-light:  #2e1065;
+  --color-primary-rgb:    107, 33, 168;
 
-  --color-bg:             #0f172a;
-  --color-bg-secondary:   #1e293b;
-  --color-bg-tertiary:    #0f172a;
+  --color-bg:             #000000;
+  --color-bg-secondary:   #0b0b0c;
+  --color-bg-tertiary:    #121214;
 
-  --color-text:           #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted:     #475569;
+  --color-text:           #ffffff;
+  --color-text-secondary: #e4e4e7;
+  --color-text-muted:     #a1a1aa;
 
-  --color-border:         rgba(255, 255, 255, 0.08);
-  --color-border-hover:   rgba(255, 255, 255, 0.15);
+  --color-border:         #27272a;
+  --color-border-hover:   #3f3f46;
 
-  --color-error:          #f87171;
-  --color-error-bg:       rgba(239, 68, 68, 0.15);
-  --color-success:        #34d399;
-  --color-success-bg:     rgba(16, 185, 129, 0.15);
-  --color-warning:        #fbbf24;
-  --color-warning-bg:     rgba(245, 158, 11, 0.15);
-  --color-info:           #60a5fa;
-  --color-info-bg:        rgba(59, 130, 246, 0.15);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --color-error:          #ef4444;
+  --color-error-bg:       #450a0a;
+  --color-success:        #10b981;
+  --color-success-bg:     #022c22;
+  --color-warning:        #f59e0b;
+  --color-warning-bg:     #451a03;
+  --color-info:           #3b82f6;
+  --color-info-bg:        #172554;
 }

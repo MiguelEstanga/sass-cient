@@ -4,45 +4,47 @@ import { storage, storageName } from "@/lib/utils/storage";
 import type { User, LoginResponse, Prefix, TypeDocument } from "@/types/auth.types";
 
 interface AuthStore {
-  token: string | null;
-  user: User | null;
-  role: string | null;
-  companyId: number | null;
-  prefixes: Prefix[];
-  typeDocuments: TypeDocument[];
+  token:           string | null;
+  user:            User | null;
+  role:            string | null;
+  companyId:       number | null;
+  prefixes:        Prefix[];
+  typeDocuments:   TypeDocument[];
+  permissions:     string[];
   isAuthenticated: boolean;
-  _hasHydrated: boolean;
-
-  setAuth: (data: LoginResponse) => void;
-  logout: () => void;
-  hasRole: (role: string) => boolean;
-  setHasHydrated: (state: boolean) => void;
+  _hasHydrated:    boolean;
+  setAuth:         (data: LoginResponse) => void;
+  logout:          () => void;
+  hasRole:         (role: string) => boolean;
+  setHasHydrated:  (state: boolean) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
-      token: null,
-      user: null,
-      role: null,
-      companyId: null,
-      prefixes: [],
-      typeDocuments: [],
+      token:           null,
+      user:            null,
+      role:            null,
+      companyId:       null,
+      prefixes:        [],
+      typeDocuments:   [],
+      permissions:     [], // ← agregar
       isAuthenticated: false,
-      _hasHydrated: false,
+      _hasHydrated:    false,
 
       setHasHydrated: (state) => set({ _hasHydrated: state }),
 
       setAuth: (data: LoginResponse) => {
-        storage.set(storageName.token, data.access_token);
+        storage.set(storageName.token,     data.access_token);
         storage.set(storageName.companyId, data.company_id);
         set({
-          token: data.access_token,
-          user: data.user,
-          role: data.role,
-          companyId: data.company_id,
-          prefixes: data.prefixes,
-          typeDocuments: data.type_documents,
+          token:           data.access_token,
+          user:            data.user,
+          role:            data.role,
+          companyId:       data.company_id,
+          prefixes:        data.prefixes,
+          typeDocuments:   data.type_documents,
+          permissions:     data.permissions ?? [],
           isAuthenticated: true,
         });
       },
@@ -52,12 +54,13 @@ export const useAuthStore = create<AuthStore>()(
         storage.remove(storageName.companyId);
         storage.remove(storageName.user);
         set({
-          token: null,
-          user: null,
-          role: null,
-          companyId: null,
-          prefixes: [],
-          typeDocuments: [],
+          token:           null,
+          user:            null,
+          role:            null,
+          companyId:       null,
+          prefixes:        [],
+          typeDocuments:   [],
+          permissions:     [], // ← agregar
           isAuthenticated: false,
         });
       },
@@ -70,16 +73,16 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: "auth-store",
-      // Cuando termine de rehidratar, marca _hasHydrated = true
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
       partialize: (state) => ({
-        user: state.user,
-        role: state.role,
-        companyId: state.companyId,
-        prefixes: state.prefixes,
-        typeDocuments: state.typeDocuments,
+        user:            state.user,
+        role:            state.role,
+        companyId:       state.companyId,
+        prefixes:        state.prefixes,
+        typeDocuments:   state.typeDocuments,
+        permissions:     state.permissions,
         isAuthenticated: state.isAuthenticated,
       }),
     }

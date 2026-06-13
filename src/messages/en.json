@@ -11,7 +11,7 @@
       "dashboard": "Real-time dashboard"
     },
     "backLink": "Back to home",
-  
+
     "email": "Email",
     "password": "Password",
     "loginButton": "Sign in",
@@ -290,5 +290,41 @@
     "footer": {
       "rights": "All rights reserved"
     }
+  },
+  "import": {
+    "title": "Import {entity}",
+    "subtitle": "Upload a CSV or Excel file to bulk-import records",
+    "download": "Download template",
+    "drag": "Drag your file here",
+    "or": "or",
+    "browse": "browse to select",
+    "formats": "Accepted formats: .csv, .xlsx, .xls · Max 5MB",
+    "invalidFormat": "Invalid file format. Please use .csv, .xlsx, or .xls",
+    "button": "Import",
+    "close": "Close",
+    "retry": "Import another file",
+    "processing": "Processing import...",
+    "total": "Total",
+    "imported": "Imported",
+    "failed": "Failed",
+    "success": "{count, plural, =1 {# record imported successfully} other {# records imported successfully}}",
+    "errors": "{count, plural, =1 {# error found} other {# errors found}}",
+    "row": "Row"
+  },
+  "export": {
+    "button": "Export",
+    "exporting": "Exporting...",
+    "excel": "Excel",
+    "csv": "CSV",
+    "all": "All",
+    "today": "Today",
+    "last100": "Last 100",
+    "dateRange": "Date range",
+    "from": "From",
+    "to": "To",
+    "export": "Export",
+    "cancel": "Cancel",
+    "success": "File downloaded successfully",
+    "error": "Export error"
   }
 }

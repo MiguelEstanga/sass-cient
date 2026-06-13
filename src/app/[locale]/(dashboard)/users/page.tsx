@@ -54,6 +54,7 @@ export default function UsersPage() {
   const isFirstRun = useRef(true);
 
   useEffect(() => {
+    console.log(fetcher);
     if (isFirstRun.current) { isFirstRun.current = false; return; }
     refresh();
   }, [roleFilter, refresh]);

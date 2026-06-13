@@ -55,13 +55,14 @@ export interface TypeDocument {
  * Response completa del endpoint POST /auth/login
  */
 export interface LoginResponse {
-  access_token: string;
-  token_type: string;
-  role: string;
-  company_id: number;
-  user: User;
-  prefixes: Prefix[];
+  access_token:   string;
+  token_type:     string;
+  role:           string;
+  company_id:     number;
+  user:           User;
+  prefixes:       Prefix[];
   type_documents: TypeDocument[];
+  permissions:    string[]; // ← agregar
 }
 
 /**

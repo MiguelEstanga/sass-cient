@@ -14,10 +14,13 @@ import { SkeletonRow } from "@/components/ui/Skeleton";
 import { ServicesTable } from "./ServicesTable";
 import { ServiceForm } from "./components/ServiceForm";
 import type { ServiceFormValues } from "@/lib/validations/service.schema";
- 
+
 import { Service } from "@/types/services.types";
 import { serviceService } from "@/services/services.service";
 import styles from "./styles/services.module.css";
+import { ExportMenu } from "@/components/ui/ExportMenu";
+import { exportService } from "@/services/export.service";
+import { PageActions } from "@/components/ui/PageActions";
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_PAGE_SIZE) || 10;
 
 export default function ServicesPage() {
@@ -30,11 +33,21 @@ export default function ServicesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const { rows, total, page, lastPage, loading, search, setSearch, setPage, refresh } =
-    useLocalCache<Service>(
-      (params) => serviceService.getAll(params),
-      { keyField: "id", blockSize: 1500, pageSize: PAGE_SIZE }
-    );
+  const {
+    rows,
+    total,
+    page,
+    lastPage,
+    loading,
+    search,
+    setSearch,
+    setPage,
+    refresh,
+  } = useLocalCache<Service>((params) => serviceService.getAll(params), {
+    keyField: "id",
+    blockSize: 1500,
+    pageSize: PAGE_SIZE,
+  });
 
   function openCreate() {
     setEditing(null);
@@ -67,7 +80,9 @@ export default function ServicesPage() {
       if (err instanceof ApiError && err.isValidationError()) {
         toast.error(err.getAllErrors().join(", "));
       } else {
-        toast.error(err instanceof ApiError ? err.message : t("errorConnection"));
+        toast.error(
+          err instanceof ApiError ? err.message : t("errorConnection"),
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -86,7 +101,7 @@ export default function ServicesPage() {
           refresh();
         } catch (err) {
           toast.error(
-            err instanceof ApiError ? err.message : t("errorDeleting")
+            err instanceof ApiError ? err.message : t("errorDeleting"),
           );
         } finally {
           setDeletingId(null);
@@ -104,7 +119,10 @@ export default function ServicesPage() {
             {total > 0 ? t("subtitle", { count: total }) : ""}
           </p>
         </div>
-        <Button onClick={openCreate}>{t("newButton")}</Button>
+        <PageActions>
+          <ExportMenu onExport={exportService.services} />
+          <Button onClick={openCreate}>{t("newButton")}</Button>
+        </PageActions>
       </div>
 
       <div className={styles.toolbar}>
@@ -149,9 +167,7 @@ export default function ServicesPage() {
         onClose={closeDrawer}
         title={editing ? t("editTitle") : t("newTitle")}
         subtitle={
-          editing
-            ? t("editSubtitle", { name: editing.name })
-            : t("newSubtitle")
+          editing ? t("editSubtitle", { name: editing.name }) : t("newSubtitle")
         }
       >
         <ServiceForm

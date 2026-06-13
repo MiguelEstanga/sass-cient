@@ -12,12 +12,15 @@ import { Input } from "@/components/ui/Input";
 import { Drawer, ConfirmDialog } from "@/components/ui/Modal";
 import { Paginator } from "@/components/ui/Pagination";
 import { SkeletonRow } from "@/components/ui/Skeleton";
- 
+
 import type { Product } from "@/types/product.types";
 import type { ProductFormValues } from "@/lib/validations/product.schema";
 import styles from "./styles/products.module.css";
 import { ProductForm } from "./components/ProductForm";
 import { ProductsTable } from "./ProductsTable";
+import { ExportMenu } from "@/components/ui/ExportMenu";
+import { exportService } from "@/services/export.service";
+import { PageActions } from "@/components/ui/PageActions";
 
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_PAGE_SIZE) || 10;
 const PAGE_PAGINATE = Number(process.env.NEXT_PUBLIC_PAGE_PAGINATE) || 1;
@@ -31,11 +34,21 @@ export default function ProductsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
-  const { rows, total, page, lastPage, loading, search, setSearch, setPage, refresh } =
-    useLocalCache<Product>(
-      (params) => productService.getAll(params),
-      { keyField: "id", blockSize: 1500, pageSize: PAGE_SIZE }
-    );
+  const {
+    rows,
+    total,
+    page,
+    lastPage,
+    loading,
+    search,
+    setSearch,
+    setPage,
+    refresh,
+  } = useLocalCache<Product>((params) => productService.getAll(params), {
+    keyField: "id",
+    blockSize: 1500,
+    pageSize: PAGE_SIZE,
+  });
 
   function openCreate() {
     setEditing(null);
@@ -55,8 +68,8 @@ export default function ProductsPage() {
   async function handleSubmit(values: ProductFormValues, image: File | null) {
     setIsSubmitting(true);
     try {
-      const payload:any = { ...values, image };
-      
+      const payload: any = { ...values, image };
+
       if (editing) {
         await productService.update(editing.id, payload);
         toast.success(t("updated", { name: values.name }));
@@ -70,7 +83,9 @@ export default function ProductsPage() {
       if (err instanceof ApiError && err.isValidationError()) {
         toast.error(err.getAllErrors().join(", "));
       } else {
-        toast.error(err instanceof ApiError ? err.message : t("errorConnection"));
+        toast.error(
+          err instanceof ApiError ? err.message : t("errorConnection"),
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -88,7 +103,9 @@ export default function ProductsPage() {
           toast.success(t("deleted", { name }));
           refresh();
         } catch (err) {
-          toast.error(err instanceof ApiError ? err.message : t("errorDeleting"));
+          toast.error(
+            err instanceof ApiError ? err.message : t("errorDeleting"),
+          );
         } finally {
           setDeletingId(null);
         }
@@ -105,7 +122,10 @@ export default function ProductsPage() {
             {total > 0 ? t("subtitle", { count: total }) : ""}
           </p>
         </div>
-        <Button onClick={openCreate}>{t("newButton")}</Button>
+        <PageActions>
+          <ExportMenu onExport={exportService.products} />
+          <Button onClick={openCreate}>{t("newButton")}</Button>
+        </PageActions>
       </div>
 
       <div className={styles.toolbar}>
@@ -141,7 +161,6 @@ export default function ProductsPage() {
           pageSize={1}
           loading={loading}
           onChange={setPage}
-          
         />
       </div>
 
@@ -149,7 +168,9 @@ export default function ProductsPage() {
         open={drawerOpen}
         onClose={closeDrawer}
         title={editing ? t("editTitle") : t("newTitle")}
-        subtitle={editing ? t("editSubtitle", { name: editing.name }) : t("newSubtitle")}
+        subtitle={
+          editing ? t("editSubtitle", { name: editing.name }) : t("newSubtitle")
+        }
       >
         <ProductForm
           defaultValues={editing ?? undefined}

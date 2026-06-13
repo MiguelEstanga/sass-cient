@@ -19,25 +19,41 @@ import type { ClientProfile } from "@/types/user.types";
 import type { ClientFormValues } from "@/lib/validations/client.schema";
 import type { UpdatePersonFormValues } from "@/lib/validations/person.schema";
 import styles from "./styles/clients.module.css";
-
+import { usePinConfirm } from "@/hooks/usePinConfirm";
+import { PinDialog } from "@/components/ui/PinDialog/PinDialog";
+import { useRole } from "@/hooks/useRole";
+import { Upload } from "lucide-react";
+import { ImportDrawer } from "@/components/ui/ImportDrawer/ImportDrawer";
+import { importService } from "@/services/import.service";
+import { ExportMenu } from "@/components/ui/ExportMenu";
+import { exportService } from "@/services/export.service";
+import { PageActions } from "@/components/ui/PageActions";
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_PAGE_SIZE) || 10;
 
 export default function ClientsPage() {
   const toast = useToast();
   const { confirm, dialogProps } = useConfirm();
-
-  const [drawerOpen, setDrawerOpen]     = useState(false);
-  const [editing, setEditing]           = useState<Client | null>(null);
+  const { pinConfirm, pinDialogProps } = usePinConfirm();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [editing, setEditing] = useState<Client | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [deletingId, setDeletingId]     = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const {
-    rows, total, page, lastPage,
-    loading, search, setSearch, setPage, refresh,
-  } = useLocalCache<Client>(
-    (params) => clientService.getAll(params),
-    { keyField: "id", blockSize: 1500, pageSize: PAGE_SIZE }
-  );
+    rows,
+    total,
+    page,
+    lastPage,
+    loading,
+    search,
+    setSearch,
+    setPage,
+    refresh,
+  } = useLocalCache<Client>((params) => clientService.getAll(params), {
+    keyField: "id",
+    blockSize: 1500,
+    pageSize: PAGE_SIZE,
+  });
 
   function openCreate() {
     setEditing(null);
@@ -66,7 +82,9 @@ export default function ClientsPage() {
       if (err instanceof ApiError && err.isValidationError()) {
         toast.error(err.getAllErrors().join(", "));
       } else {
-        toast.error(err instanceof ApiError ? err.message : "Error de conexión");
+        toast.error(
+          err instanceof ApiError ? err.message : "Error de conexión",
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -86,7 +104,9 @@ export default function ClientsPage() {
       if (err instanceof ApiError && err.isValidationError()) {
         toast.error(err.getAllErrors().join(", "));
       } else {
-        toast.error(err instanceof ApiError ? err.message : "Error de conexión");
+        toast.error(
+          err instanceof ApiError ? err.message : "Error de conexión",
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -94,8 +114,9 @@ export default function ClientsPage() {
   }
 
   function handleDelete(id: number, name: string) {
-    confirm({
-      title:   "Eliminar cliente",
+    console.log("hola");
+    pinConfirm({
+      title: "Eliminar cliente",
       message: `¿Estás seguro de que quieres eliminar a ${name}? Esta acción no se puede deshacer.`,
       onConfirm: async () => {
         setDeletingId(id);
@@ -104,7 +125,9 @@ export default function ClientsPage() {
           toast.success(`${name} eliminado correctamente`);
           refresh();
         } catch (err) {
-          toast.error(err instanceof ApiError ? err.message : "Error al eliminar");
+          toast.error(
+            err instanceof ApiError ? err.message : "Error al eliminar",
+          );
         } finally {
           setDeletingId(null);
         }
@@ -116,16 +139,17 @@ export default function ClientsPage() {
   function toClientProfile(client: Client): ClientProfile {
     return {
       ...client,
-      _type:   "client",
-      email:   client.email   ?? null,
-      phone:   client.phone   ?? null,
-      notes:   client.notes   ?? null,
+      _type: "client",
+      email: client.email ?? null,
+      phone: client.phone ?? null,
+      notes: client.notes ?? null,
       user_id: client.user_id ?? null,
       is_busy: false,
-      roles:   [],
+      roles: [],
     } as ClientProfile;
   }
-
+  const { clients } = useRole();
+  const [importOpen, setImportOpen] = useState(false);
   return (
     <div className={styles.page}>
       <div className={styles.pageHeader}>
@@ -135,7 +159,10 @@ export default function ClientsPage() {
             {total > 0 ? `${total} clientes registrados` : ""}
           </p>
         </div>
-        <Button onClick={openCreate}>+ Nuevo Cliente</Button>
+        <PageActions>
+          <ExportMenu onExport={exportService.clients} />
+          <Button onClick={openCreate}>+ Nuevo Cliente</Button>
+        </PageActions>
       </div>
 
       <div className={styles.toolbar}>
@@ -202,7 +229,7 @@ export default function ClientsPage() {
         )}
       </Drawer>
 
-      <ConfirmDialog {...dialogProps} confirmLabel="Sí, eliminar" />
+      <PinDialog {...pinDialogProps} />
     </div>
   );
 }

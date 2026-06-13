@@ -52,6 +52,7 @@ export default function LoginPage() {
   async function onSubmit(values: LoginFormValues) {
     try {
       const data = await authService.login(values);
+      console.log("Login successful:", data);
       setAuth(data);
       toast.success(`¡Bienvenido, ${data.user.name}!`);
       router.push("/dashboard");
